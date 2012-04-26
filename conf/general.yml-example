@@ -15,7 +15,6 @@
 # PostgreSQL database for FMSE
 
 FMSE_DB_HOST: 'localhost'
-FMSE_DB_PORT: '5432'
 FMSE_DB_NAME: 'fms-endpoint'
 FMSE_DB_USER: 'fms-endpoint'
 FMSE_DB_PASS: ''
