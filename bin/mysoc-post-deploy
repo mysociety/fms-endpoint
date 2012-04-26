@@ -1,0 +1,6 @@
+#!/bin/bash
+#
+# django-post-deploy
+#
+# automagically move general.yml conf info into conf files
+
