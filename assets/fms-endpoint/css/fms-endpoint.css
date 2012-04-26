@@ -1,0 +1,134 @@
+body#fmse-admin {
+    background-color: #ccc;
+    font-family: sans-serif;
+    margin:0;
+    padding:0;
+}
+
+.fmse-header {
+    margin:0;
+    padding: 1em 1em 0.5em 1em;
+    color: #fff;
+    background-color: #999;
+    border-bottom:2px solid #666;
+}
+.fmse-header h1 {
+    margin:0 0 0.5em 0;
+    text-shadow:-1px -1px #666;
+}
+.fmse-nav ul {
+    list-style: none;
+    padding:0;
+    margin: 0;
+}
+.fmse-nav ul li {
+    display: inline;
+    padding: 0;
+    margin: 0 0.333em 0 0;
+}
+.fmse-nav ul li a {
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    padding: 4px 8px;
+}
+.fmse-nav ul li a.user {
+    background-color: #666;
+    color: #fff;
+    padding: 4px 8px;
+}
+.fmse-nav ul li a:hover, .fmse-footer a:hover {
+    background-color: #933;
+}
+
+.fmse-content {
+    margin: 0;
+    padding: 1em 1em 3em 1em;   
+    background-color: #eee; 
+}
+
+.dataTables_wrapper {
+    font-size:100%;
+}
+
+.fmse-footer {
+    border-top: 2px solid #666;
+    padding: 1em 1.5em 1em 1em;
+    text-align: right;
+}
+.fmse-footer a {
+    color: #fff;
+    text-decoration: none;
+    background-color: #999;
+    padding: 4px 8px;
+}
+
+a.fmse-web-link {
+    display:inline-block;
+    min-height:16px;
+    background-image:url(../images/fms-link.png);
+    background-position: 0 -84px;
+    background-repeat:no-repeat;
+    padding-left: 20px;    
+}
+a.fmse-web-link-fms {
+    display:inline-block;
+    min-height:16px;
+    background-image:url(../images/fms-link.png);
+    background-position: 0 0;
+    background-repeat:no-repeat;
+    padding-left: 20px;    
+}
+.fmse-prio {
+    display:block;
+    padding: 2px 2px 2px 8px;
+}
+.fmse-prio-2 {
+    color: #fff;
+    background-color: #4a4;
+}
+.fmse-prio-1 {
+    background-color: #9e9;
+}
+.fmse-prio0 {
+    background-color: #fd9;
+}
+.fmse-prio1 {
+    background-color: #e99;
+}
+.fmse-prio2 {
+    color: #fff;
+    background-color: #f66;
+}
+.text-content  {
+    line-height: 1.6em;
+}
+.text-content ul li {
+    margin: 0.666em;
+}
+
+/* used for error messages in auth, e.g. login */
+#infoMessage p {
+   background-color: #fcc;
+   padding: 0.5em 1em;
+   margin:0;
+   border-left: 3px solid #f00;
+}
+.user_table {
+    border-collapse: collapse;
+}
+.user_table tr {
+	border-top: 1px solid #fff;
+	border-left: 1px solid #fff;
+}
+.user_table tr td, .user_table tr th {
+    padding: 0.5em;
+	border-bottom: 1px solid #fff;
+	border-right: 1px solid #fff;
+	background-color: #ccc;
+}
+.user_table tr th {
+	background-color: #999;
+	font-weight: bold;
+    
+}

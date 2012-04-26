@@ -1,0 +1,22 @@
+# general-example.yml:
+# Example values for the "general" config file.
+#
+# mySociety Configuration parameters, in YAML syntax.
+#
+#-------------------------------------------------------------------------------
+# These settings are used by the mySociety deployment mechanism, which lets us
+# automatically populate configuration settings.
+#
+# *You* almost certainly don't need to do this! :-)
+#
+# Instead see ../README.md for a summary of config setup!
+#
+
+# PostgreSQL database for FMSE
+
+FMSE_DB_HOST: 'localhost'
+FMSE_DB_PORT: '5432'
+FMSE_DB_NAME: 'fms-endpoint'
+FMSE_DB_USER: 'fms-endpoint'
+FMSE_DB_PASS: ''
+
