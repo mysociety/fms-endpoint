@@ -5,7 +5,7 @@ Citizens Online Democracy.
 
 > For specific component licenses, see:
 > license-codeigniter.txt and license-grocery-crud.txt
-> See the README.md for attribution and links.
+> See the README.md for more attribution and links.
 
 Unless otherwise stated in particular files or directories, this
 software is free software; you can redistribute it and/or modify it

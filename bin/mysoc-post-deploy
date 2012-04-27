@@ -1,6 +1,11 @@
 #!/bin/bash
 #
-# django-post-deploy
+# mysoc-post-deploy
 #
-# automagically move general.yml conf info into conf files
+# script to automagically move general.yml conf info into conf files:
+# actually isn't needed (so far) because database config is loaded explictly
+# if the conf/general.yml file is there...
+# See: ../codeigniter/fms_endpoint/config/database.php
+
+# script left here for future use :-)
 

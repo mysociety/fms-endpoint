@@ -23,4 +23,34 @@ $db['default']['stricton'] = FALSE;
 
 //$db['default']['port'] = 8889;
 
+// mySociety-specific deploy mechanism:
+// if our conf/general.yaml file is there, use its settings
+// This is specific to the mySociety internal deploy mechanism.
+
+$conf_general_filename = BASEPATH . "../conf/general.yml";
+if (file_exists($conf_general_filename)) {  
+    require_once APPPATH . "libraries/spyc.php";
+    $readme = Spyc::YAMLLoad($conf_general_filename);
+    foreach ($readme as $key => $value) {      
+        $k = strtolower(str_replace("FMSE_", "", trim($key)));
+        switch ($k) {
+            case 'db_host':
+                $k = 'hostname';
+                break;
+            case 'db_name':
+                $k = 'database';
+                break;
+            case 'db_user':
+                $k = 'username';
+                break;
+            case 'db_pass':
+                $k = 'password';
+                break;
+            default:
+                $k = '';
+        }
+        $db['default'][$k] = trim($value);
+    }
+} 
+
 ?>

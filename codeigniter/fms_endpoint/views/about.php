@@ -18,6 +18,10 @@
     user auth by <a href="https://github.com/benedmunds/CodeIgniter-Ion-Auth">Ion Auth 2</a> by Ben Edmunds,
     released under the Apache License v2.0
   </li>
+  <li>
+    YAML parsed with <a href="http://spyc.sourceforge.net">spyc</a>
+    (c) 2005-2006 Chris Wanstrath, 2006-2011 Vlad Andersen,
+    released under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT License</a>
 </ul>
 
 <p>
