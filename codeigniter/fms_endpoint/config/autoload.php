@@ -39,7 +39,12 @@
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database', 'Ion_auth');
+$autoload['libraries'] = array();
+//---^---------------------------------------------------------------------
+// note: fms-endpoint isn't autoloading 'database' just so that the home page
+// runs happily without it, to aid in setup/configuration   'Ion_auth'
+
+
 
 
 /*

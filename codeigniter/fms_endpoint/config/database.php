@@ -12,7 +12,7 @@ $db['default']['database'] = "fms-endpoint";
 $db['default']['dbdriver'] = "mysql";
 $db['default']['dbprefix'] = "";
 $db['default']['pconnect'] = TRUE;
-$db['default']['db_debug'] = TRUE;
+$db['default']['db_debug'] = FALSE;
 $db['default']['cache_on'] = FALSE;
 $db['default']['cachedir'] = "";
 $db['default']['char_set'] = "utf8";
@@ -24,8 +24,7 @@ $db['default']['stricton'] = FALSE;
 //$db['default']['port'] = 8889;
 
 // mySociety-specific deploy mechanism:
-// if our conf/general.yaml file is there, use its settings
-// This is specific to the mySociety internal deploy mechanism.
+// If our conf/general.yaml file exists, use its settings.
 
 $conf_general_filename = BASEPATH . "../conf/general.yml";
 if (file_exists($conf_general_filename)) {  
@@ -49,8 +48,9 @@ if (file_exists($conf_general_filename)) {
             default:
                 $k = '';
         }
-        $db['default'][$k] = trim($value);
+        if ($k) {
+          $db['default'][$k] = trim($value);
+        }
     }
 } 
-
 ?>

@@ -18,7 +18,7 @@
 <body id="fmse-admin">
   <div class="fmse-header">
     <h1>
-      <?php echo config_item('organisation_name'); ?>: Problem Reports
+      <?php echo config_item('organisation_name'); ?>
 	  </h1>
     <div class="fmse-nav">
       <ul>

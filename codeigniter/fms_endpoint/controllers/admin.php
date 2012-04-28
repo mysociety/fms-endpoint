@@ -11,6 +11,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$this->load->helper('url');
 		/* ------------------ */	
 		
+		$this->load->library('Ion_auth');
 		$this->load->library('grocery_CRUD');
 		
 		if (!$this->ion_auth->logged_in()) {
