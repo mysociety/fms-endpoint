@@ -13,8 +13,14 @@ body#fmse-admin {
     border-bottom:2px solid #666;
 }
 .fmse-header h1 {
-    margin:0 0 0.5em 0;
+    margin:0 0 0.5em -1em;
     text-shadow:-1px -1px #666;
+    background-image:url(../images/fms-endpoint-title.png);
+    background-position: center left;
+    background-repeat: no-repeat;
+    padding-left: 96px;
+    min-height: 66px;
+    line-height: 66px;
 }
 .fmse-nav ul {
     list-style: none;
@@ -108,10 +114,28 @@ a.fmse-web-link-fms {
 }
 
 /* used for error messages in auth, e.g. login */
-#infoMessage p {
+ul.warnings {
+    list-style-type: none;
+    margin: 1em 0;
+    padding:0;
+}
+ul.warnings .details {
+    background-color: #fff;
+    padding: 10px 1em 1em 40px;
+    margin-left: 20px;
+    color: #666;
+    background-image:url(../images/lightbulb.png);
+    background-repeat: no-repeat;
+    background-position: 8px 0px;
+}
+ul.warnings .details li {
+    margin: 0.5em;
+}
+
+#infoMessage p, ul.warnings li p{
    background-color: #fcc;
-   padding: 0.5em 1em;
-   margin:0;
+   padding: 1em 1em;
+   margin: 0.5em 0 0 0;
    border-left: 3px solid #f00;
 }
 .user_table {
@@ -129,6 +153,8 @@ a.fmse-web-link-fms {
 }
 .user_table tr th {
 	background-color: #999;
-	font-weight: bold;
-    
+	font-weight: bold;   
+}
+.code {
+    font-family: monospace;
 }
