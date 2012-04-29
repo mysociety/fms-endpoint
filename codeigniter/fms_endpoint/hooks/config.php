@@ -12,7 +12,7 @@ function load_db_config_settings() {
 	if (property_exists($CI, 'db')) { 
 		$results = $CI->db->get('config_settings')->result();
 		foreach ($results as $setting) {
-			$CI->config->set_item($setting->name, $setting->value);
+			$CI->config->set_item($setting->name, trim($setting->value));
 		}
 	}
 }

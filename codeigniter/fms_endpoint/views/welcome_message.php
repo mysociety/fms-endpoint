@@ -28,7 +28,18 @@
       <?php } ?>
     </h2>	  
     <?php
-    if (count($problems) > 0) { ?>
+    if (count($problems) == 0) { ?>
+      <ul class="success_messages">
+        <li>
+        <div class="details">
+            <ul>
+              <li>You can redirect this page automatically by changing the <b>redirect_root_page</b> configuration setting.
+              <li>Alternatively, edit <span class="code">fms_endpoint/views/welcome_message.php</span> to show your own content.
+            </ul>
+        </div>
+        </li>
+      </ul>
+    <?php } else { ?>
       <ul class="warnings">
         <?php
           for($i = 0; $i < count($problems); ++$i) {

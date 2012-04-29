@@ -32,8 +32,8 @@ END_OF_HTML;
       array_push($problems, "Can't connect to database: make sure your database configuration is correct");
       array_push($details, $msg);      
     } else {
-      $query = $this->db->get('config_settings');
-      if ($query->num_rows() == 0) { // table should not be empty        
+      $config_query = $this->db->get('config_settings');
+      if ($config_query->num_rows() == 0) { // table should not be empty        
         array_push($problems, "Database is not populated yet.");
         array_push($details, "Run the SQL in <span class='code'>db/fms-endpoint-initial.sql</span> to create and populate the tables.");
         $query = $this->db->get('reports');
@@ -42,6 +42,10 @@ END_OF_HTML;
           array_push($details, "Running the <span class='code'>db/fms-endpoint-initial.sql</span> won't delete any reports data.");
         }
       } else { // database seems OK
+        foreach ($config_query->result() as $setting) {
+          $this->config->set_item($setting->name, trim($setting->value));
+        }
+        
         $query = $this->db->get_where('users',  array('email' => 'admin@example.com'));
         if ($query->num_rows() == 1) {
           array_push($problems, 'You need to configure your administrator user.');
@@ -57,8 +61,7 @@ END_OF_HTML;
 END_OF_HTML;
           array_push($details, $msg);
         }
-        $query = $this->db->get_where('config_settings',  array('name' =>'organisation_name'));
-        $name = trim($query->row()->value);
+        $name = $this->config->item('organisation_name');
         if ($name=='Example Department' || $name=='') {
           array_push($problems, 'The configuration setting <b>organisation_name</b> needs to be set.');
           array_push($details, "Login as the administrator and click on <a href='admin/settings'>Settings</a>. Click on the edit button for <b>organisation_name</b>, and change the name under <b>value</b>.");
@@ -67,12 +70,17 @@ END_OF_HTML;
         }
       } 
     }
-    $data = array(
-              'problems' => $problems,
-              'details'  => $details,
-              'title'    => $title
-              );    
-    $this->load->view('welcome_message', $data);
+    if ($this->config->item('redirect_root_page')) {
+      $this->load->helper('url');
+      redirect($this->config->item('redirect_root_page'));
+    } else {
+      $data = array(
+                'problems' => $problems,
+                'details'  => $details,
+                'title'    => $title,
+                );    
+      $this->load->view('welcome_message', $data);
+    }
 	}
 }
 

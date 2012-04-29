@@ -114,12 +114,12 @@ a.fmse-web-link-fms {
 }
 
 /* used for error messages in auth, e.g. login */
-ul.warnings {
+ul.warnings, ul.success_messages {
     list-style-type: none;
     margin: 1em 0;
     padding:0;
 }
-ul.warnings .details {
+ul.warnings .details, ul.success_messages .details {
     background-color: #fff;
     padding: 10px 1em 1em 40px;
     margin-left: 20px;
@@ -128,7 +128,7 @@ ul.warnings .details {
     background-repeat: no-repeat;
     background-position: 8px 0px;
 }
-ul.warnings .details li {
+.details li {
     margin: 0.5em;
 }
 
@@ -137,6 +137,12 @@ ul.warnings .details li {
    padding: 1em 1em;
    margin: 0.5em 0 0 0;
    border-left: 3px solid #f00;
+}
+ul.success_messages li p {
+  background-color: #cfc;
+  padding: 1em 1em;
+  margin: 0.5em 0 0 0;
+  border-left: 3px solid #f00;
 }
 .user_table {
     border-collapse: collapse;
