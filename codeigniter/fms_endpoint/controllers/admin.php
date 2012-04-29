@@ -111,6 +111,9 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 			$crud->display_as('desc', 'Explanation');
 			$crud->callback_column('desc', array($this, '_full_description'));
 			$crud->unset_texteditor('name','value');
+			$crud->edit_fields('name', 'desc', 'value'); 
+			$crud->callback_edit_field('name', array($this,'_read_only_name_field'));  // read-only during edit
+			$crud->callback_edit_field('desc', array($this,'_read_only_desc_field'));  // read-only during edit
 			$crud->unset_delete();
 			$crud->set_subject("configuration setting");
 			$output = $crud->render();
@@ -123,11 +126,16 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$this->load->view('admin_view.php', $output);	
 	}
 	
-	function _admin_output($output = null)
-	{
+	function _admin_output($output = null) {
 		$this->load->view('admin_view.php', $output);	
 	}
-	
+
+	function _read_only_name_field($value, $primary_key) { return $this->_read_only_field('name', $value); }
+	function _read_only_desc_field($value, $primary_key) { return $this->_read_only_field('desc', $value); }
+	function _read_only_field($name, $value) {
+      return '<input type="hidden" value="' . $value . '" name="' . $name . '"/>' . $value;
+  }
+
 	function _linkify($value, $row) {
 		$retval = '';
 		if ($value) {
