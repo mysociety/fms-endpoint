@@ -1,8 +1,9 @@
   </div>
   <div class="fmse-footer">
-    <p style="float:left;">
-      Open311 server enabled: <?php echo config_item('enable_open311_server') ?>
-    </p>
+    <div class="open311-status open311-status-<?php if(is_config_true(config_item('enable_open311_server'))) { echo('on');} else {echo('off');} ?>">
+      Open311 server 
+      <?php if(is_config_true(config_item('enable_open311_server'))) { echo('on');} else {echo('off');} ?>
+    </div>
     <?php if ($auth->logged_in()) { ?>
       <a href='<?php echo site_url('admin/about')?>' class="fmse-mysoc">about</a>
     <?php } ?>

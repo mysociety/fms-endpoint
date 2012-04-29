@@ -168,3 +168,14 @@ ul.success_messages li p {
     display: block;
     margin-left:4em;
 }
+.open311-status {
+ padding: 4px 8px 4px 4px;
+ background-color:#eee;
+ float:left;
+}
+.open311-status-off {
+    border-left: 1.25em solid #900;   
+}
+.open311-status-on {
+    border-left: 1.25em solid #060;   
+}
