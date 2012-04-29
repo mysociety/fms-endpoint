@@ -142,7 +142,7 @@ ul.success_messages li p {
   background-color: #cfc;
   padding: 1em 1em;
   margin: 0.5em 0 0 0;
-  border-left: 3px solid #f00;
+  border-left: 3px solid #0f0;
 }
 .user_table {
     border-collapse: collapse;
@@ -163,4 +163,8 @@ ul.success_messages li p {
 }
 .code {
     font-family: monospace;
+}
+.open311api_hints {
+    display: block;
+    margin-left:4em;
 }

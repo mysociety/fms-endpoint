@@ -18,6 +18,9 @@ class Welcome extends Controller {
     $problems  = array();
     $details = array();
     $title = 'FMS-endpoint';
+    $is_open311_enabled =  false;
+    $this->load->helper('fms_endpoint');
+
     $this->load->database();
     $err_no = $this->db->_error_number();
     if ($err_no != 0) {
@@ -68,6 +71,7 @@ END_OF_HTML;
         } else {
           $title = $name; 
         }
+        $is_open311_enabled =  is_config_true($this->config->item('enable_open311_server'));
       } 
     }
     if ($this->config->item('redirect_root_page')) {
@@ -78,6 +82,7 @@ END_OF_HTML;
                 'problems' => $problems,
                 'details'  => $details,
                 'title'    => $title,
+                'is_open311_enabled' => $is_open311_enabled
                 );    
       $this->load->view('welcome_message', $data);
     }

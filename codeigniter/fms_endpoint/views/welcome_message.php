@@ -31,12 +31,36 @@
     if (count($problems) == 0) { ?>
       <ul class="success_messages">
         <li>
-        <div class="details">
-            <ul>
-              <li>You can redirect this page automatically by changing the <b>redirect_root_page</b> configuration setting.
-              <li>Alternatively, edit <span class="code">fms_endpoint/views/welcome_message.php</span> to show your own content.
-            </ul>
-        </div>
+          <p>
+            This is the FMS-endpoint root page.
+          </p>
+          <div class="details">
+              You can leave this page as it is, or:
+              <ul>
+                <li>redirect this page automatically (for example, to the <a href="admin">admin</a>) by logging in as the administrator,
+                  and changing the <b>redirect_root_page</b> setting in <a href="admin/settings">config settings</a> 
+                <li>edit <span class="code">fms_endpoint/views/welcome_message.php</span> and replace it with your own content
+              </ul>
+          </div>
+        </li>
+        <li>
+          <p> The Open311 service is currently <b>
+            <?php if (! $is_open311_enabled) { echo('not'); } ?>
+             enabled</b>, so  
+            <?php if (! $is_open311_enabled) { echo('attempts to use it will be rejected.'); } else { ?>
+              requests to the following URLs will be serviced.
+              <span class="code open311api_hints">
+              <br/>services/<i>&lt;service-id&gt;</i>.xml 
+              <br/>services.xml
+              <br/>requests/<i>&lt;report-id&gt;</i>;.xml
+              <br/>requests.xml
+              </span>
+            <?php } ?>
+          </p>
+          <div class="details">
+              You can switch the Open311 server on and off by logging in as the administrator, and changing <b>enable_open311_server</b>
+              setting in <a href="admin/settings">config settings</a>.
+          </div>
         </li>
       </ul>
     <?php } else { ?>
