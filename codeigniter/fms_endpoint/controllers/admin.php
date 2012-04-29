@@ -114,6 +114,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 			$crud->callback_column('desc', array($this, '_full_description'));
 			$crud->unset_texteditor('name','value');
 			$crud->edit_fields('name', 'desc', 'value'); 
+			$crud->callback_edit_field('value', array($this,'_text_field'));  // the default (textarea) is too big for any setttings currentlys
 			$crud->callback_edit_field('name', array($this,'_read_only_name_field'));  // read-only during edit
 			$crud->callback_edit_field('desc', array($this,'_read_only_desc_field'));  // read-only during edit
 			$crud->unset_delete();
@@ -136,6 +137,9 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 	function _read_only_desc_field($value, $primary_key) { return $this->_read_only_field('desc', $value); }
 	function _read_only_field($name, $value) {
       return '<input type="hidden" value="' . $value . '" name="' . $name . '"/>' . $value;
+  }
+	function _text_field($value, $primary_key) {
+      return '<input type="text" value="' . $value . '" name="value"/>';
   }
 
 	function _linkify($value, $row) {
