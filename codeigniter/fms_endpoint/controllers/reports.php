@@ -5,12 +5,14 @@ class Reports extends Controller {
 	function Reports()
 	{
 		parent::Controller();
+		$this->load->database();
+		$this->load->library('Ion_auth');
 		$this->load->helper('xml');
-		
+		$this->load->helper('fms_endpoint');
+		open311_enabled_or_error();
+    
 		// Be sure to comment out or disable this for production
 		$this->load->scaffolding('reports');
-        
-			
 	}
 	
 	function index()
@@ -141,10 +143,6 @@ class Reports extends Controller {
 		
 		$this->load->view('reports_post_response_xml', $data);
 	}	
-	
-	
-
-
 	
 }
 

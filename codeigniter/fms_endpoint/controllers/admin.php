@@ -9,6 +9,8 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		/* Standard Libraries */
 		$this->load->database();
 		$this->load->helper('url');
+		$this->load->helper('fms_endpoint');
+	    
 		/* ------------------ */	
 		
 		$this->load->library('Ion_auth');
@@ -90,7 +92,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$crud->set_theme('flexigrid');
 		$crud->set_table('categories');
 		
-		if (!($this->ion_auth->is_admin() || $this->_config_true($this->config->item('can_edit_categories')))) {
+		if (!($this->ion_auth->is_admin() || is_config_true($this->config->item('can_edit_categories')))) {
 		    $crud->unset_delete();
 		    $crud->unset_add();
 		    $crud->unset_edit();
@@ -150,12 +152,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 	}
 	
 	function _full_description($value, $row) {
-		
 		return $value = wordwrap($row->desc, strlen($row->desc), "<br>", true);
 	}
 
-	function _config_true($raw_value) {
-		$config_value = strtolower(trim($raw_value));
-		return ($config_value != '' && $config_value != '0' && $config_value != 'f' && $config_value != 'false' && $config_value != 'no');
-	}
 }
