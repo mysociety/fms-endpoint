@@ -80,8 +80,8 @@ CREATE TABLE `config_settings` (
 
 INSERT INTO `config_settings` VALUES('organisation_name', 'Example Department', '<p>The name of the department/council/authority running this endpoint.</p>');
 INSERT INTO `config_settings` VALUES('can_edit_categories', 'no', '<p>Can normal users change the Open311 Categories? Suggested values:</p>\n<ul>\n<li>no [default]</li>\n<li>yes</li>\n</ul>\n<p>The admin user can always change them.</p>');
-INSERT INTO `config_settings` VALUES('redirect_root_page', '', 'Once your endpoint is up and running, you may prefer to automatically redirect it to the admin URL. Suggested values: <ul><li style="padding-left:3em"> <i>(blank)</i> [default &mdash; no redirection: display the root page]</li><li>/admin </li><li> any URL</li></ul>Be sure to <a href="/">visit the root page</a> after changing this setting to check that it is working as you expected.');
-
+INSERT INTO `config_settings` VALUES('redirect_root_page', '', '<p>Once your endpoint is up and running, you may prefer to automatically redirect it to the admin URL. Suggested values:</p> <ul><li style="padding-left:3em"> <i>(blank)</i> [default &mdash; no redirection: display the root page]</li><li>/admin </li><li> any URL</li></ul><p>Be sure to <a href="/">visit the root page</a> after changing this setting to check that it is working as you expected.</p>');
+INSERT INTO `config_settings` VALUES('enable_open311_server', 'yes', '<p>Is the Open311 server running? Suggested values:</p>\n<ul>\n<li>no</li>\n<li>yes [default]</li>\n</ul>');
 -- --------------------------------------------------------
 
 --
