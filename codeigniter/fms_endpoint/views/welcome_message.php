@@ -38,7 +38,7 @@
               You can leave this page as it is, or:
               <ul>
                 <li>redirect this page automatically (for example, to the <a href="admin">admin</a>) by logging in as the administrator,
-                  and changing the <b>redirect_root_page</b> setting in <a href="admin/settings">config settings</a> 
+                  and changing the <b>redirect_root_page</b> setting in <a href="admin/settings/edit/redirect_root_page">config settings</a> 
                 <li>edit <span class="code">fms_endpoint/views/welcome_message.php</span> and replace it with your own content
               </ul>
           </div>
@@ -59,7 +59,7 @@
           </p>
           <div class="details">
               You can switch the Open311 server on and off by logging in as the administrator, and changing <b>enable_open311_server</b>
-              setting in <a href="admin/settings">config settings</a>.
+              setting in <a href="admin/settings/edit/enable_open311_server">config settings</a>.
           </div>
         </li>
       </ul>

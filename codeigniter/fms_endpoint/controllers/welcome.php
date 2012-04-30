@@ -72,7 +72,7 @@ END_OF_HTML;
         $name = $this->config->item('organisation_name');
         if ($name=='Example Department' || $name=='') {
           array_push($problems, 'The configuration setting <b>organisation_name</b> needs to be set.');
-          array_push($details, "Login as the administrator and click on <a href='admin/settings'>Settings</a>. Click on the edit button for <b>organisation_name</b>, and change the name under <b>value</b>.");
+          array_push($details, "Login as the administrator, and change the <b>organisation_name</b> setting in <a href='admin/settings/edit/organisation_name'>config settings</a>.");
         } else {
           $title = $name; 
         }
