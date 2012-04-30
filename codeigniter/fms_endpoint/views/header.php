@@ -31,7 +31,7 @@
             <li><a href='<?php echo site_url('admin/settings')?>'>Settings</a></li>
             <li><a href='<?php echo site_url('auth/')?>'>Users</a></li>
           <?php } ?>
-          <li style="float:right;"><a class="user" href="<?php echo site_url('/auth/change_password')?>"><?php echo $current_user_data->email ?></a><a href='<?php echo site_url('auth/logout')?>'>Logout</a></li>
+          <li id="current-user-nav"><a class="user" href="<?php echo site_url('/auth/change_password')?>" title="change password"><?php echo $current_user_data->email ?></a><a href='<?php echo site_url('auth/logout')?>'>Logout</a></li>
         <?php } else { ?>
           <li></li>
           <?php if ($this->uri->uri_string() != '/auth/login' ) { ?>

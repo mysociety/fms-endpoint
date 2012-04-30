@@ -47,6 +47,12 @@ body#fmse-admin {
     background-color: #933;
 }
 
+#current-user-nav {
+    position:absolute;
+    top: 20px;
+    right:10px;
+}
+
 .fmse-content {
     margin: 0;
     padding: 1em 1em 3em 1em;   

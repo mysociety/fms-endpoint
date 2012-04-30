@@ -1,7 +1,7 @@
   </div>
   <div class="fmse-footer">
     <div class="open311-status open311-status-<?php if(is_config_true(config_item('enable_open311_server'))) { echo('on');} else {echo('off');} ?>">
-      Open311 server 
+      Open311 server is
       <?php if(is_config_true(config_item('enable_open311_server'))) { echo('on');} else {echo('off');} ?>
     </div>
     <?php if ($auth->logged_in()) { ?>
