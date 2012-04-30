@@ -36,13 +36,18 @@ END_OF_HTML;
       array_push($details, $msg);      
     } else {
       $config_query = $this->db->get('config_settings');
-      if ($config_query->num_rows() == 0) { // table should not be empty        
+      $err_no = $this->db->_error_number();
+      log_message('debug', 'problem::: $this->db->get("config_settings") yields error number: ' . $err_no);
+      
+      if ( $err_no != 0 || $config_query->num_rows() == 0) { // table should not be empty        
         array_push($problems, "Database is not populated yet.");
         array_push($details, "Run the SQL in <span class='code'>db/fms-endpoint-initial.sql</span> to create and populate the tables.");
-        $query = $this->db->get('reports');
-        if ($query->num_rows() > 1) { // ...but there is data (beyond the expected example) in the reports table, which is unexpected
-          array_push($problems, "<b>Note</b> It looks like you've got data (possibly live reports) in your database, which seems odd when other tables are empty.");
-          array_push($details, "Running the <span class='code'>db/fms-endpoint-initial.sql</span> won't delete any reports data.");
+        if ($err_no == 0) {
+          $query = $this->db->get('reports');
+          if ($query->num_rows() > 1) { // ...but there is data (beyond the expected example) in the reports table, which is unexpected
+            array_push($problems, "<b>Note</b> It looks like you've got data (possibly live reports) in your database, which seems odd when other tables are empty.");
+            array_push($details, "Running the <span class='code'>db/fms-endpoint-initial.sql</span> won't delete any reports data.");
+          }
         }
       } else { // database seems OK
         foreach ($config_query->result() as $setting) {
