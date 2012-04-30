@@ -34,7 +34,6 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 
 	function index() {
 		try{
-			/* This is only for the autocompletion */
 			$crud = new grocery_CRUD();
 
 			$crud->set_theme('flexigrid');
@@ -61,10 +60,16 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 	
 	function reports()
 	{
-	  $crud = new grocery_CRUD();
-
+	  $crud = new grocery_CRUD(); 
+	  $crud->required_fields('report_id');
 		$crud->set_theme('flexigrid');
 		$crud->set_table('reports');
+		// explicitly list all fields (was missing out report-id)
+    $crud->columns('report_id', 'status', 'requested_datetime', 'priority',  'category_id', 'category_name',
+      'media_url', 'status_notes', 'description', 'agency_responsible', 'service_notice',
+      'updated_datetime', 'expected_datetime', 'address', 'address_id', 'postal_code', 'lat', 'long', 
+      'email', 'device_id', 'account_id', 'first_name', 'last_name', 'phone');
+    
 		$crud->set_relation('priority','priorities','prio_name',null,'priority ASC');
 		$crud->display_as('requested_datetime', 'Received')
 		      ->display_as('category_name', 'Category')
