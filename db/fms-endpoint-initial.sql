@@ -163,7 +163,7 @@ CREATE TABLE `reports` (
 -- Dumping data for table `reports`
 --
 
-INSERT INTO `reports` VALUES(698792, 'open', NULL, 3, 'Pothole', '042', NULL, NULL, NULL, '2010-07-22 23:05:00', NULL, '2012-04-26 08:30:00', '<p>INTERSECTION of 22ND ST and SAN BRUNO AVE</p>', NULL, NULL, 37.756954, -122.40473, 'a_user@example.com', NULL, NULL, 'Anne', 'Example', NULL, 'http://farm3.static.flickr.com/2002/2212426634_5ed477a060.jpg');
+INSERT INTO `reports` VALUES(698792, 'open', NULL, 0, 'Pothole', '042', NULL, NULL, NULL, '2010-07-22 23:05:00', NULL, '2012-04-26 08:30:00', '<p>INTERSECTION of 22ND ST and SAN BRUNO AVE</p>', NULL, NULL, 37.756954, -122.40473, 'a_user@example.com', NULL, NULL, 'Anne', 'Example', NULL, 'http://farm3.static.flickr.com/2002/2212426634_5ed477a060.jpg');
 
 
 -- --------------------------------------------------------

@@ -58,7 +58,7 @@
             <?php } ?>
           </p>
           <div class="details">
-              You can switch the Open311 server on and off by logging in as the administrator, and changing <b>enable_open311_server</b>
+              You can switch the Open311 server on and off by logging in as the administrator, and changing the <b>enable_open311_server</b>
               setting in <a href="admin/settings/edit/enable_open311_server">config settings</a>.
           </div>
         </li>
