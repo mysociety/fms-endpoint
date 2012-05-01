@@ -66,7 +66,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$crud->set_table('reports');
 		// explicitly list all fields (was missing out report-id)
     $crud->columns('report_id', 'status', 'requested_datetime', 'priority',  'category_id', 'category_name',
-      'media_url', 'status_notes', 'description', 'agency_responsible', 'service_notice',
+      'media_url', 'status_notes', 'description', 'agency_responsible', 'service_notice', 'token',
       'updated_datetime', 'expected_datetime', 'address', 'address_id', 'postal_code', 'lat', 'long', 
       'email', 'device_id', 'account_id', 'first_name', 'last_name', 'phone');
     

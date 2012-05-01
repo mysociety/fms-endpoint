@@ -9,24 +9,31 @@ class Categories extends Controller {
 		$this->load->library('Ion_auth');
 		$this->load->helper('xml');
 		$this->load->helper('fms_endpoint');
-	    open311_enabled_or_error();
+		open311_enabled_or_error();
 	    
 		// Be sure to comment out or disable this for production
 		$this->load->scaffolding('categories');
-        
 			
 	}
 	
 	function index()
 	{
 		$data['categories'] = $this->db->get('categories');
-		
 		$this->load->view('categories_xml', $data);
 	}
 	
 
 	function get_feed($format)
 	{
+		// check here for jurisdiction_id?
+		$url = parse_url($_SERVER['REQUEST_URI']);
+		parse_str($url['query'], $params);
+		if (array_key_exists('jurisdiction_id', $params)) {
+			log_message('debug', 'note: jurisdiction_id=' . $params['jurisdiction_id'] . " is currently ignored");
+		} else {
+			log_message('debug', "note: no jurisdiction_id was provided");
+		}
+
 		$data['categories'] = $this->db->get('categories');
 		
  		switch ($format) {

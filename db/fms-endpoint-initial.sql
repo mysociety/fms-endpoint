@@ -141,6 +141,7 @@ CREATE TABLE `reports` (
   `description` text,
   `agency_responsible` varchar(255) DEFAULT NULL,
   `service_notice` text,
+  `token` varchar(255) DEFAULT NULL,
   `requested_datetime` datetime DEFAULT NULL,
   `updated_datetime` datetime DEFAULT NULL,
   `expected_datetime` datetime DEFAULT NULL,
@@ -157,7 +158,7 @@ CREATE TABLE `reports` (
   `phone` varchar(255) DEFAULT NULL,
   `media_url` text,
   PRIMARY KEY (`report_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=702641 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1000 ;
 
 --
 -- Dumping data for table `reports`
