@@ -11,7 +11,12 @@
 |	http://example.com/
 |
 */
-$config['base_url']	= "http://dave.fms-endpoint.dev.mysociety.org/";
+// $config['base_url']	= "";
+
+// note: if you the base_url explicitly (above), comment this out, since it's auto-detecting
+//       which isn't what you want if fms-endpoint isn't the only thing running, in the root
+$config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+$config['base_url'] .= "://".$_SERVER['HTTP_HOST'];
 
 /*
 |--------------------------------------------------------------------------

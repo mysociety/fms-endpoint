@@ -26,6 +26,9 @@ $db['default']['stricton'] = FALSE;
 // mySociety-specific deploy mechanism:
 // If our conf/general.yaml file exists, use its settings.
 
+// note: one of these settings isn't a datbase setting. Bad style.
+//       FMSE_BASE_URL (currently not used)
+
 $conf_general_filename = BASEPATH . "../conf/general.yml";
 if (file_exists($conf_general_filename)) {  
     require_once APPPATH . "libraries/spyc.php";
@@ -45,6 +48,17 @@ if (file_exists($conf_general_filename)) {
             case 'db_pass':
                 $k = 'password';
                 break;
+            case 'base_url': // note this isn't a database setting
+                $base_url = trim($value);
+                $len = strlen($base_url);
+                if ($len > 0) {
+                    if (strrpos($base_url, '/') != $len-1) {
+                        $base_url = $base_url . '/';
+                    }
+                    $config['base_url'] = $base_url;
+                    log_message('debug',"config['base_url'] is " . $base_url);
+                    // sadly, not carried through to config... kept in in case it's useful
+                }
             default:
                 $k = '';
         }

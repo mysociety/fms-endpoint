@@ -21,9 +21,15 @@ class Welcome extends Controller {
     $is_open311_enabled =  false;
     $this->load->helper('fms_endpoint');
 
+    if ($this->config->item('base_url')=='') {
+      array_push($problems, 'The config setting <b>base_url</b> needs to be set.');
+      array_push($details, 'Edit the <span class="code">$config[\'base_url\']</span> setting on line 14 of <span class="code">codeigniter/fms_endpoint/config/config.php</span>.');
+    }
+    
     $this->load->database();
     $err_no = $this->db->_error_number();
     if ($err_no != 0) {
+      log_message('debug', '$this->load->database() yields error no.: ' . $err_no);
       $msg =<<<END_OF_HTML
       Check that: 
         <ol>
@@ -37,9 +43,8 @@ END_OF_HTML;
     } else {
       $config_query = $this->db->get('config_settings');
       $err_no = $this->db->_error_number();
-      log_message('debug', 'problem::: $this->db->get("config_settings") yields error number: ' . $err_no);
-      
       if ( $err_no != 0 || $config_query->num_rows() == 0) { // table should not be empty        
+        log_message('debug', '$this->db->get(\'config_settings\') yields error no.: ' . $err_no);
         array_push($problems, "Database is not populated yet.");
         array_push($details, "Run the SQL in <span class='code'>db/fms-endpoint-initial.sql</span> to create and populate the tables.");
         if ($err_no == 0) {
