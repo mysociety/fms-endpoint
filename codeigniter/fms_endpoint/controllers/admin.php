@@ -19,39 +19,33 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		}
 	}
 
-	function _remap($method) {
-		if (method_exists($this, $method))
-		{
-			$this->$method();
-		}
-		else {
-			$this->index($method);
-		}
-	}
-
 	function index() {
 		try{
-			$crud = new grocery_CRUD();
-			$crud->columns('report_id','status', 'requested_datetime','priority','category_id','media_url','description','address');
-			$crud = $this->_set_common_report_crud($crud);
+			$crud = $this->_set_common_report_crud(array('report_id','status', 'requested_datetime','priority','category_id','media_url','description','address'));
 			$output = $crud->render();
 			$this->_admin_output($output);
-
 		} catch(Exception $e) {
 			show_error($e->getMessage().' --- '.$e->getTraceAsString());
 		}
 	}
 
 	function reports() {
-		$crud = new grocery_CRUD();
 		// explicitly list all fields (was missing out report-id)
-		$crud->columns('report_id', 'status', 'requested_datetime', 'priority',  'category_id',
-			'media_url', 'status_notes', 'description', 'agency_responsible', 'service_notice', 'token',
-			'updated_datetime', 'expected_datetime', 'address', 'address_id', 'postal_code', 'lat', 'long',
-			'email', 'device_id', 'account_id', 'first_name', 'last_name', 'phone');
-		$crud = $this->_set_common_report_crud($crud);
+		$crud = $this->_set_common_report_crud(array());
 		$output = $crud->render();
 		$this->_admin_output($output);
+	}
+
+	function report($id) {
+		$query = $this->db->get_where('reports', array('report_id' => $id), 1);
+		if ($query->num_rows()==1) {
+			//$data['report'] = $query->row();
+			$this->load->vars(array('report' => $query->row()));
+			$output = array('output' => $this->load->view('report', '', true));
+			$this->_admin_output($output);
+		} else {
+			show_error("Record $id not found", 404);
+		}
 	}
 
 	function reports_csv() {
@@ -108,7 +102,22 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$this->load->view('admin_view.php', $output);
 	}
 
-	function _set_common_report_crud($crud) {
+	// there is some magic here: using xxx_report_id because we running callback_column directly
+	// on report_id breaks other field renders that contain report_id
+	function _set_common_report_crud($columns) {
+		$crud = new grocery_CRUD();
+		$default_columns = array('report_id', 'status', 'requested_datetime', 'priority',  'category_id',
+			'media_url', 'status_notes', 'description', 'agency_responsible', 'service_notice', 'token',
+			'updated_datetime', 'expected_datetime', 'address', 'address_id', 'postal_code', 'lat', 'long',
+			'email', 'device_id', 'account_id', 'first_name', 'last_name', 'phone');
+		$columns = $columns? $columns : $default_columns;
+		foreach ($columns as &$colname) {
+			if ($colname == 'report_id') {
+				$colname = 'xxx_report_id';
+			}
+		}
+		$crud->columns($columns);
+		$crud->edit_fields($default_columns);
 		$crud->set_theme('flexigrid');
 		$crud->set_table('reports');
 		$crud->set_subject('Problem report');
@@ -116,17 +125,32 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$crud->set_relation('priority','priorities','<span class="fmse-prio fmse-prio{prio_value}">{prio_name}</span>',null,'prio_value ASC');
 		$crud->callback_column('media_url',array($this,'_linkify'));
 		$crud->callback_edit_field('media_url', array($this,'_text_media_url_field'));  // the default (textarea) is too big
+		//$crud->callback_column('report_id',array($this,'_report_id_link_field'));
 		$crud->display_as('requested_datetime', 'Received')
 			->display_as('category_id', 'Category')
 			->display_as('media_url', 'URL');
 		$crud->unset_texteditor('address', 'status_notes', 'service_notice');
+		$crud->add_action('View', '/assets/fms-endpoint/images/report.png', 'admin/report');
+		
+		$crud->callback_column('xxx_report_id', array($this, '_report_id_link_field'));
+		$crud->display_as('xxx_report_id', 'ID');
+		$crud->callback_edit_field('xxx_report_id', array($this, '_read_only_report_id_field'));
 		return $crud;
 	}
-	
+	 
 	function _admin_output($output = null) {
 		$this->load->view('admin_view.php', $output);
 	}
 
+	// make the ID a link to the 
+	function _report_id_link_field($value, $row) {
+		$rid = $row->report_id;
+		return "<a href='" . config_item('base_url') . "/admin/report/$rid' class='report-id-link'>$rid</a>";
+	}
+	
+	function _read_only_report_id_field($value, $primary_key) { 
+		return "<input type='hidden' value='$value' name='$primary_key'/>$value";
+	}
 	function _read_only_name_field($value, $primary_key) { return $this->_read_only_field('name', $value); }
 	function _read_only_desc_field($value, $primary_key) { return $this->_read_only_field('desc', $value); }
 	function _read_only_field($name, $value) {

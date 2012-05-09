@@ -183,8 +183,45 @@ ul.success_messages li p {
  float:left;
 }
 .open311-status-off {
-    border-left: 1.25em solid #900;   
+  border-left: 1.25em solid #900;   
 }
 .open311-status-on {
-    border-left: 1.25em solid #060;   
+  border-left: 1.25em solid #060;   
+}
+.single-report {
+  margin: 1em 0;
+}
+.single-report dl {
+  clear: both;
+  padding: 0;
+  border-top:1px solid #fff;
+  margin:0;
+}
+.single-report .report-data dt {
+  clear: both;
+  float: left;
+  width: 8em;
+  margin: 0.1em 0 0.1em 0;
+  padding: 0.25em;
+  text-align: right;
+  font-style: italic;
+  color: #666;
+  border-right: 1px solid #fff;
+}
+.single-report .report-data dd {
+  margin: 0 0 0 9em;
+  padding: 0.25em;
+}
+.single-report span.report-id {
+  font-weight: bold;
+  font-size: 120%;
+}
+.report-id-link {
+  background-image:url(/assets/fms-endpoint/images/report.png);
+  background-position: center left;
+  background-repeat: no-repeat;
+  min-height: 16px;
+  color:#000;
+  padding-left: 20px;
+  display: inline-block;
 }
