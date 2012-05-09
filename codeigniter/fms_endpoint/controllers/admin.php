@@ -39,18 +39,20 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 			$crud->set_theme('flexigrid');
 			$crud->set_table('reports');
 			$crud->set_subject('Problem report');
-			$crud->required_fields('report_id');
+			$crud->columns('report_id','status', 'requested_datetime','priority','category_id','media_url','description','address');
 			$crud->display_as('requested_datetime', 'Received')
-			      ->display_as('category_name', 'Category')
+			      ->display_as('category_id', 'Category')
 			      ->display_as('media_url', 'URL');
 
-			$crud->callback_column('media_url',array($this,'_linkify'));
+      $crud->set_relation('category_id','categories','category_name',null,'category_name ASC');
 			$crud->set_relation('priority','priorities','<span class="fmse-prio fmse-prio{prio_value}">{prio_name}</span>',null,'prio_value ASC');
 
-			$crud->columns('report_id','status', 'requested_datetime','priority','category_name','media_url','description','address');
+			$crud->callback_column('media_url',array($this,'_linkify'));
+			$crud->callback_edit_field('media_url', array($this,'_text_media_url_field'));  // the default (textarea) is too big
+
+  		$crud->unset_texteditor('address');
 
 			$output = $crud->render();
-			
 			$this->_admin_output($output);
 			
 		}catch(Exception $e){
@@ -58,29 +60,29 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		}
 	}	
 	
-	function reports()
-	{
+	function reports() {
 	  $crud = new grocery_CRUD(); 
-	  $crud->required_fields('report_id');
 		$crud->set_theme('flexigrid');
 		$crud->set_table('reports');
+		$crud->set_subject('Problem report');
 		// explicitly list all fields (was missing out report-id)
-    $crud->columns('report_id', 'status', 'requested_datetime', 'priority',  'category_id', 'category_name',
+    $crud->columns('report_id', 'status', 'requested_datetime', 'priority',  'category_id',
       'media_url', 'status_notes', 'description', 'agency_responsible', 'service_notice', 'token',
       'updated_datetime', 'expected_datetime', 'address', 'address_id', 'postal_code', 'lat', 'long', 
       'email', 'device_id', 'account_id', 'first_name', 'last_name', 'phone');
-    
-		$crud->set_relation('priority','priorities','prio_name',null,'priority ASC');
 		$crud->display_as('requested_datetime', 'Received')
-		      ->display_as('category_name', 'Category')
+		      ->display_as('category_id', 'Category')
 		      ->display_as('media_url', 'URL');
-		
-		$crud->callback_column('media_url',array($this,'_linkify'));
+    
+    $crud->set_relation('category_id','categories','category_name',null,'category_name ASC');
 		$crud->set_relation('priority','priorities','<span class="fmse-prio fmse-prio{prio_value}">{prio_name}</span>',null,'prio_value ASC');
 
+		$crud->callback_column('media_url',array($this,'_linkify'));
+		$crud->callback_edit_field('media_url', array($this,'_text_media_url_field'));  // the default (textarea) is too big
+
+		$crud->unset_texteditor('address');
 
 		$output = $crud->render();
-
 		$this->_admin_output($output);
 	}
 	
@@ -104,6 +106,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		    $crud->unset_add();
 		    $crud->unset_edit();
 		}
+		
 		$crud->set_subject('Open311 category');
 		$output = $crud->render();
 
@@ -121,10 +124,9 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 			$crud->callback_column('desc', array($this, '_full_description'));
 			$crud->unset_texteditor('name','value');
 			$crud->edit_fields('name', 'desc', 'value'); 
-			$crud->callback_edit_field('value', array($this,'_text_field'));  // the default (textarea) is too big for any setttings currentlys
+			$crud->callback_edit_field('value', array($this,'_text_value_field'));  // the default (textarea) is too big for any setttings currentlys
 			$crud->callback_edit_field('name', array($this,'_read_only_name_field'));  // read-only during edit
 			$crud->callback_edit_field('desc', array($this,'_read_only_desc_field'));  // read-only during edit
-			$crud->unset_delete();
 			$crud->set_subject("configuration setting");
 			$output = $crud->render();
 			$this->_admin_output($output);
@@ -145,8 +147,11 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 	function _read_only_field($name, $value) {
       return '<input type="hidden" value="' . $value . '" name="' . $name . '"/>' . $value;
   }
-	function _text_field($value, $primary_key) {
-      return '<input type="text" value="' . $value . '" name="value"/>';
+  
+  function _text_value_field($value, $primary_key) { return $this->_text_field('value', $value); }
+  function _text_media_url_field($value, $primary_key) { return $this->_text_field('media_url', $value); }
+	function _text_field($name, $value) {
+      return '<input type="text" value="' . $value . '" name="' . $name . '"/>';
   }
 
 	function _linkify($value, $row) {
