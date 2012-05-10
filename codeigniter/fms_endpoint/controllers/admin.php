@@ -37,7 +37,13 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 	}
 
 	function report($id) {
-		$query = $this->db->get_where('reports', array('report_id' => $id), 1);
+		$this->db->select('*');
+		$this->db->from('reports');
+		$this->db->join('priorities', 'reports.priority = priorities.prio_value');
+		$this->db->join('categories', 'reports.category_id = categories.category_id');
+		$this->db->where('report_id', $id);
+
+		$query = $this->db->get();
 		if ($query->num_rows()==1) {
 			//$data['report'] = $query->row();
 			$this->load->vars(array('report' => $query->row()));

@@ -13,11 +13,12 @@
 	</dl>
 	<dl class="report-data">
 		<dt>Priority</dt>
-		<dd class="fmse-prio<?php echo($report->priority)?>"><?php echo($report->priority)?></dd>
+		<dd class="fmse-prio<?php echo($report->priority)?>"><?php echo($report->prio_name)?></dd>
 	</dl>
 	<dl class="report-data">
 		<dt>Category</dt>
-		<dd><?php echo($report->category_id)?></dd>
+		<!-- id: <?php echo($report->category_id)?> -->
+		<dd><?php echo($report->category_name)?></dd>
 	</dl>
 	<dl class="report-data">
 		<dt>Description</dt>
@@ -95,3 +96,4 @@
 			<? } ?>
 		</dd>
 	</dl>
+</div>
