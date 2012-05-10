@@ -58,12 +58,8 @@
 		<dd><?php echo($report->postal_code)?></dd>
 	</dl>
 	<dl class="report-data">
-		<dt>lat</dt>
-		<dd><?php echo($report->lat)?></dd>
-	</dl>
-	<dl class="report-data">
-		<dt>long</dt>
-		<dd><?php echo($report->long)?></dd>
+		<dt>lat : long</dt>
+		<dd><?php echo($report->lat)?> : <?php echo($report->long)?></dd>
 	</dl>
 	<dl class="report-data">
 		<dt>Email</dt>
