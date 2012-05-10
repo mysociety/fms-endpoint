@@ -20,13 +20,14 @@ class Categories extends Controller {
 	function get_feed($format) {
 		// check here for jurisdiction_id?
 		$url = parse_url($_SERVER['REQUEST_URI']);
-		parse_str($url['query'], $params);
-		if (array_key_exists('jurisdiction_id', $params)) {
-			log_message('debug', 'note: jurisdiction_id=' . $params['jurisdiction_id'] . " is currently ignored");
-		} else {
-			log_message('debug', "note: no jurisdiction_id was provided");
+		if (array_key_exists('query', $url)) { 
+			parse_str($url['query'], $params);
+			if (array_key_exists('jurisdiction_id', $params)) {
+				log_message('debug', 'note: jurisdiction_id=' . $params['jurisdiction_id'] . " is currently ignored");
+			} else {
+				log_message('debug', "note: no jurisdiction_id was provided");
+			}
 		}
-
 		$data['categories'] = $this->db->get('categories');
 
  		switch ($format) {
