@@ -5,15 +5,16 @@
 <?php 
     if (isset($css_files)) {
         foreach($css_files as $file): ?>
-	<link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
+    <link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
         <?php endforeach; 
      }
      if (isset($js_files)) {
          foreach($js_files as $file): ?>
-	<script src="<?php echo $file; ?>"></script>
+    <script src="<?php echo $file; ?>"></script>
         <?php endforeach;
     } ?>
-  <link rel="stylesheet" type="text/css" href="/assets/fms-endpoint/css/fms-endpoint.css">
+  <link rel="stylesheet" type="text/css" href="/assets/fms-endpoint/css/fms-endpoint.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/fms-endpoint/css/print.css" media="print" />
 </head>
 <body id="fmse-admin">
   <div class="fmse-header">
