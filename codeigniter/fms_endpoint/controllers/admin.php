@@ -21,7 +21,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 
 	function index() {
 		try{
-			$crud = $this->_set_common_report_crud(array('report_id','status', 'requested_datetime','priority','category_id','media_url','description','address'));
+			$crud = $this->_set_common_report_crud(array('report_id','status', 'requested_datetime','priority','category_id','external_id','media_url','description','address'));
 			$output = $crud->render();
 			$this->_admin_output($output);
 		} catch(Exception $e) {
@@ -113,7 +113,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 	function _set_common_report_crud($columns) {
 		$crud = new grocery_CRUD();
 		$default_columns = array('report_id', 'status', 'requested_datetime', 'priority',  'category_id',
-			'media_url', 'status_notes', 'description', 'agency_responsible', 'service_notice', 'token',
+			'external_id', 'media_url', 'status_notes', 'description', 'agency_responsible', 'service_notice', 'token',
 			'updated_datetime', 'expected_datetime', 'address', 'address_id', 'postal_code', 'lat', 'long',
 			'email', 'device_id', 'account_id', 'first_name', 'last_name', 'phone');
 		$columns = $columns? $columns : $default_columns;

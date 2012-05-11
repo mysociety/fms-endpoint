@@ -82,6 +82,11 @@ INSERT INTO `config_settings` VALUES('organisation_name', 'Example Department', 
 INSERT INTO `config_settings` VALUES('can_edit_categories', 'no', '<p>Can normal users change the Open311 Categories? Suggested values:</p>\n<ul>\n<li>no [default]</li>\n<li>yes</li>\n</ul>\n<p>The admin user can always change them.</p>');
 INSERT INTO `config_settings` VALUES('redirect_root_page', '', '<p>Once your endpoint is up and running, you may prefer to automatically redirect it to the admin URL. Suggested values:</p> <ul><li style="padding-left:3em"> <i>(blank)</i> [default &mdash; no redirection: display the root page]</li><li>/admin </li><li> any URL</li></ul><p>Be sure to <a href="/">visit the root page</a> after changing this setting to check that it is working as you expected.</p>');
 INSERT INTO `config_settings` VALUES('enable_open311_server', 'yes', '<p>Is the Open311 server running? Suggested values:</p>\n<ul>\n<li>no</li>\n<li>yes [default]</li>\n</ul>');
+INSERT INTO `config_settings` VALUES('open311_use_external_id', 'always', '<p>Does the Open311 server demand that an external ID (such as FixMyStreet problem ID) is always provided? Suggested values:</p>\n<ul>\n<li>no</li>\n<li>optional</li>\n<li>always [default]</li>\n</ul>');
+INSERT INTO `config_settings` VALUES('open311_use_external_name', 'external_id', '<p>The name of the external ID that must be sent if <strong>open311_use_external_id</strong> is set to <em>yes</em>. Defaults to <em>external_id</em> if left blank. For example, use as <em>attrib[external_id]</em> in incoming reports.</li>\n</ul>');
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -141,6 +146,7 @@ CREATE TABLE `reports` (
   `agency_responsible` varchar(255) DEFAULT NULL,
   `service_notice` text,
   `token` varchar(255) DEFAULT NULL,
+  `external_id` varchar(255) DEFAULT NULL,
   `requested_datetime` datetime DEFAULT NULL,
   `updated_datetime` datetime DEFAULT NULL,
   `expected_datetime` datetime DEFAULT NULL,
