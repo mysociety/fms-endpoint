@@ -108,13 +108,14 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$this->load->view('admin_view.php', $output);
 	}
 
-	// there is some magic here: using xxx_report_id because we running callback_column directly
-	// on report_id breaks other field renders that contain report_id
+	// There is some magic here: using xxx_report_id because we running callback_column directly
+	// on report_id breaks other field renders (such as actions) that contain report_id.
 	function _set_common_report_crud($columns) {
 		$crud = new grocery_CRUD();
+		// default columns excludes: token address_id simply because FMS/FMS-endpoint doesn't use them
 		$default_columns = array('report_id', 'status', 'requested_datetime', 'priority',  'category_id',
-			'external_id', 'media_url', 'status_notes', 'description', 'agency_responsible', 'service_notice', 'token',
-			'updated_datetime', 'expected_datetime', 'address', 'address_id', 'postal_code', 'lat', 'long',
+			'external_id', 'media_url', 'status_notes', 'description', 'agency_responsible', 'service_notice',
+			'updated_datetime', 'expected_datetime', 'address', 'postal_code', 'lat', 'long',
 			'email', 'device_id', 'account_id', 'first_name', 'last_name', 'phone');
 		$columns = $columns? $columns : $default_columns;
 		foreach ($columns as &$colname) {
@@ -128,13 +129,16 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$crud->set_table('reports');
 		$crud->set_subject('Problem report');
 		$crud->set_relation('category_id','categories','category_name',null,'category_name ASC');
-		$crud->set_relation('priority','priorities','<span class="fmse-prio fmse-prio{prio_value}">{prio_name}</span>',null,'prio_value ASC');
+		$crud->set_relation('priority','priorities',
+			'<span class="fmse-prio fmse-prio{prio_value}">{prio_name}</span>',null,'prio_value ASC');
 		$crud->callback_column('media_url',array($this,'_linkify'));
-		$crud->callback_edit_field('media_url', array($this,'_text_media_url_field'));  // the default (textarea) is too big
-		//$crud->callback_column('report_id',array($this,'_report_id_link_field'));
+		$crud->callback_edit_field('media_url', array($this,'_text_media_url_field'));  
 		$crud->display_as('requested_datetime', 'Received')
+			->display_as('updated_datetime', 'Updated')
+			->display_as('expected_datetime', 'Expected')		
 			->display_as('category_id', 'Category')
-			->display_as('media_url', 'URL');
+			->display_as('media_url', 'URL')
+			->display_as('external_id', 'FMS ID');
 		$crud->unset_texteditor('address', 'status_notes', 'service_notice');
 		$crud->add_action('View', '/assets/fms-endpoint/images/report.png', 'admin/report');
 		

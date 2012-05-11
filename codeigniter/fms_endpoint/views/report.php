@@ -32,9 +32,15 @@
 		<dt>Service notice</dt>
 		<dd><?php echo($report->service_notice)?></dd>
 	</dl>
+	<!--
 	<dl class="report-data">
 		<dt>Token</dt>
 		<dd><?php echo($report->token)?></dd>
+	</dl>
+	-->
+	<dl class="report-data">
+		<dt>FMS ID</dt>
+		<dd><?php echo($report->external_id)?></dd>
 	</dl>
 	<dl class="report-data">
 		<dt>Requested</dt>
@@ -50,8 +56,7 @@
 	</dl>
 	<dl class="report-data">
 		<dt>Address</dt>
-		<dd><?php echo($report->address)?></dd><br/>
-		<dd><?php echo($report->address_id)?></dd>
+		<dd><?php echo($report->address)?></dd>
 	</dl>
 	<dl class="report-data">
 		<dt>Post code</dt>
