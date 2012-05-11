@@ -18,6 +18,17 @@ class Reports extends Controller {
 
 	function post_report($format) {
 		$service_code = (!empty($_POST['service_code'])) ? $_POST['service_code'] : '';
+		
+		if ($service_code != '') {
+			$lookup = $this->db->get_where('categories', array('category_id' => $service_code)); 
+			if ($lookup->num_rows() == 0) {
+				show_error("You sent a service code of \"$service_code\", which is not recognised by this server.",
+				 	OPEN311_GENERAL_SERVICE_ERROR_CODE);
+			}
+		 		} else {
+			show_error("Open311 problem reports must have a service code, but you didn't provide one.", OPEN311_SERVICE_ID_MISSING);		    
+		}
+		
 		$description = (!empty($_POST['description'])) ? $_POST['description'] : '';
 		$lat = (!empty($_POST['lat'])) ? $_POST['lat'] : '';
 		$long = (!empty($_POST['long'])) ? $_POST['long'] : '';
@@ -31,8 +42,6 @@ class Reports extends Controller {
 		$last_name = (!empty($_POST['last_name'])) ? $_POST['last_name'] : '';
 		$phone = (!empty($_POST['phone'])) ? $_POST['phone'] : '';
 		$media_url = (!empty($_POST['media_url'])) ? $_POST['media_url'] : '';
-
-		# if category id is not found locally, should reject this
 
 		$data = array(
 			'category_id' 			=> $service_code      ,
@@ -65,7 +74,7 @@ class Reports extends Controller {
 	}
 
 	function get_feed($format) {
-		if(!empty($_POST['service_code'])) { // if we're receiving a POST report call.
+		if(array_key_exists('service_code', $_POST)) { // if we're receiving a POST report call.
 			return $this->post_report($format);
 		}
 

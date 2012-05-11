@@ -37,5 +37,9 @@ define('FOPEN_WRITE_CREATE_STRICT', 			'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 
+define('OPEN311_SERVICE_ID_NOT_FOUND',   404);
+define('OPEN311_SERVICE_ID_MISSING',     400);
+define('OPEN311_GENERAL_SERVICE_ERROR',  400);
+
 /* End of file constants.php */
 /* Location: ./system/application/config/constants.php */
