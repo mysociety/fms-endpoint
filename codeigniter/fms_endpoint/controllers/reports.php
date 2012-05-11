@@ -64,6 +64,7 @@ class Reports extends Controller {
 		$media_url = (!empty($_POST['media_url'])) ? $_POST['media_url'] : '';
 
 		$data = array(
+			'status'				=> OPEN311_NEW_STATUS,
 			'category_id' 			=> $service_code      ,
 			'description' 			=> $description       ,
 			'lat'			 		=> $lat               ,
