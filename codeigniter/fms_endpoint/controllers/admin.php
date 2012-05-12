@@ -46,7 +46,11 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 
 		$query = $this->db->get();
 		if ($query->num_rows()==1) {
-			$this->load->vars(array('report' => $query->row()));
+			$image_url = $query->row()->media_url;
+			if (! preg_match('/\.(gif|jpe?g|png)$/', $image_url)) {
+				$image_url = false;
+			}
+			$this->load->vars(array('report' => $query->row(), 'image_url' => $image_url));
 			$output = array('output' => $this->load->view('report', '', true));
 			$this->_admin_output($output);
 		} else {
