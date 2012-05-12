@@ -1,23 +1,15 @@
--- phpMyAdmin SQL Dump
--- version 3.2.5
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Apr 26, 2012 at 01:39 PM
--- Server version: 5.1.44
--- PHP Version: 5.3.2
+-- SQL for initialising FMS-endpoint database
+-- suitable for mySQL 
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
---
--- Database: `fms-endpoint`
---
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `categories`
---
+-- category_id is varchar just in case that's helpful for departments with
+-- existing (legacy) classifcations for categories. Be wary of case-dependency
+-- if they're not numbers!
 
 CREATE TABLE `categories` (
   `category_id` varchar(255) NOT NULL,
@@ -57,9 +49,9 @@ CREATE TABLE `category_attributes` (
 
 --
 -- Dumping data for table `category_attributes`
---
+-- empty table; example only:
 
-INSERT INTO `category_attributes` VALUES('001', 'XX', 'true', 'text', 'true', '', 1, 'How deep is the hole?', '');
+-- INSERT INTO `category_attributes` VALUES('001', 'XX', 'true', 'text', 'true', '', 1, 'How deep is the hole?', '');
 
 -- --------------------------------------------------------
 
@@ -91,7 +83,7 @@ INSERT INTO `config_settings` VALUES('open311_use_external_name', 'external_id',
 
 --
 -- Table structure for table `groups`
---
+-- from Ion Auth 2 (CodeIgniter user authentication)
 
 CREATE TABLE `groups` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -111,71 +103,8 @@ INSERT INTO `groups` VALUES(3, 'open311', 'Open311 write access');
 -- --------------------------------------------------------
 
 --
--- Table structure for table `priorities`
---
-
-CREATE TABLE `priorities` (
-  `prio_value` varchar(255) NOT NULL,
-  `prio_name` varchar(255) NOT NULL,
-  PRIMARY KEY (`prio_value`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `priorities`
---
-
-INSERT INTO `priorities` VALUES('-2', 'Very Low');
-INSERT INTO `priorities` VALUES('-1', 'Low');
-INSERT INTO `priorities` VALUES('0', 'Normal');
-INSERT INTO `priorities` VALUES('1', 'High');
-INSERT INTO `priorities` VALUES('2', 'Urgent');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `reports`
---
-
-CREATE TABLE `reports` (
-  `report_id` int(255) NOT NULL AUTO_INCREMENT,
-  `status` varchar(255) DEFAULT NULL,
-  `status_notes` text,
-  `priority` int(255) DEFAULT '0',
-  `category_id` varchar(255) DEFAULT NULL,
-  `description` text,
-  `agency_responsible` varchar(255) DEFAULT NULL,
-  `service_notice` text,
-  `token` varchar(255) DEFAULT NULL,
-  `external_id` varchar(255) DEFAULT NULL,
-  `requested_datetime` datetime DEFAULT NULL,
-  `updated_datetime` datetime DEFAULT NULL,
-  `expected_datetime` datetime DEFAULT NULL,
-  `address` text,
-  `address_id` varchar(255) DEFAULT NULL,
-  `postal_code` varchar(255) DEFAULT NULL,
-  `lat` double DEFAULT NULL,
-  `long` double DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `device_id` varchar(255) DEFAULT NULL,
-  `account_id` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `media_url` text,
-  PRIMARY KEY (`report_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1000 ;
-
---
--- Dumping data for table `reports`
---
-
-INSERT INTO `reports` VALUES(1000, 'open', NULL, 0, '001', 'Hole in the road', NULL, NULL, NULL, '2012-05-01 12:00:00', NULL, '2012-05-02 13:00:00', 'Intersection of 22nd St and San Bruna Ave', NULL, NULL, 37.756954, -122.40473, 'a_user@example.com', NULL, NULL, 'Anne', 'Example', NULL, 'http://farm3.static.flickr.com/2002/2212426634_5ed477a060.jpg');
-
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
+-- from Ion Auth 2 (CodeIgniter user authentication)
 --
 
 CREATE TABLE `users` (
@@ -208,6 +137,7 @@ INSERT INTO `users` VALUES(1, 2130706433, 'administrator', '59beecdf7fc966e2f17f
 
 --
 -- Table structure for table `users_groups`
+-- from Ion Auth 2 (CodeIgniter user authentication)
 --
 
 CREATE TABLE `users_groups` (
@@ -223,3 +153,100 @@ CREATE TABLE `users_groups` (
 
 INSERT INTO `users_groups` VALUES(1, 1, 1);
 INSERT INTO `users_groups` VALUES(2, 1, 2);
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `priorities`
+--
+
+CREATE TABLE `priorities` (
+  `prio_value` int(11) NOT NULL,
+  `prio_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`prio_value`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `priorities`
+--
+
+INSERT INTO `priorities` VALUES('-2', 'Very Low');
+INSERT INTO `priorities` VALUES('-1', 'Low');
+INSERT INTO `priorities` VALUES('0', 'Normal');
+INSERT INTO `priorities` VALUES('1', 'High');
+INSERT INTO `priorities` VALUES('2', 'Urgent');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reports`
+--
+
+CREATE TABLE `reports` (
+  `report_id` int(255) NOT NULL AUTO_INCREMENT,
+  `status` int(11) DEFAULT '1',
+  `status_notes` text,
+  `priority` int(11) DEFAULT '0',
+  `category_id` varchar(255) DEFAULT NULL,
+  `description` text,
+  `agency_responsible` varchar(255) DEFAULT NULL,
+  `service_notice` text,
+  `token` varchar(255) DEFAULT NULL,
+  `external_id` varchar(255) DEFAULT NULL,
+  `requested_datetime` datetime DEFAULT NULL,
+  `updated_datetime` datetime DEFAULT NULL,
+  `expected_datetime` datetime DEFAULT NULL,
+  `address` text,
+  `address_id` varchar(255) DEFAULT NULL,
+  `postal_code` varchar(255) DEFAULT NULL,
+  `lat` double DEFAULT NULL,
+  `long` double DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `device_id` varchar(255) DEFAULT NULL,
+  `account_id` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `media_url` text,
+  PRIMARY KEY (`report_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1000 ;
+
+--
+-- Dumping data for table `reports`
+--
+
+INSERT INTO `reports` VALUES(1000, 1, NULL, 0, '001', 'Hole in the road', NULL, NULL, NULL, NULL, '2012-05-01 12:00:00', NULL, '2012-05-02 13:00:00', 'Intersection of 22nd St and San Bruna Ave', NULL, NULL, 37.756954, -122.40473, 'a_user@example.com', NULL, NULL, 'Anne', 'Example', NULL, 'http://farm3.static.flickr.com/2002/2212426634_5ed477a060.jpg');
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `statuses`
+--
+
+CREATE TABLE `statuses` (
+  `status_id` int(11) NOT NULL,
+  `status_name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `is_closed` tinyint(1) NOT NULL,
+  PRIMARY KEY (`status_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `statuses`
+-- Note these statuses correspond to FixMyStreet statuses
+-- except "unknown" which is an error state
+
+INSERT INTO `statuses` VALUES(0, 'unknown',  'unrecognised status', 0);
+
+INSERT INTO `statuses` VALUES(1, 'new',    'report newly created', 0);
+INSERT INTO `statuses` VALUES(2, 'open',   'awaiting action', 0);
+INSERT INTO `statuses` VALUES(3, 'closed', 'no further action required', 1);
+
+INSERT INTO `statuses` VALUES(4, 'investigating', 'investigating', 0);
+INSERT INTO `statuses` VALUES(5, 'planned', 'work is scheduled', 0);
+INSERT INTO `statuses` VALUES(6, 'in progress', 'work is in progress', 0);
+
+INSERT INTO `statuses` VALUES(7, 'fixed', 'problem is fixed', 1);
+INSERT INTO `statuses` VALUES(8, 'fixed - user', 'problem marked as fixed by public', 1);
+INSERT INTO `statuses` VALUES(9, 'fixed - council', 'problem marked as fixed by dept/council', 1);
+

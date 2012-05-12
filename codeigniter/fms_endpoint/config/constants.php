@@ -42,8 +42,9 @@ define('OPEN311_SERVICE_ID_MISSING',     400);
 define('OPEN311_GENERAL_SERVICE_ERROR',  400);
 define('OPEN311_EXTERNAL_ID_MISSING',    400); // our own error: similar to Service ID missing 
 define('OPEN311_EXTERNAL_ID_DUPLICATE',  400); // our own error 
-define('OPEN311_ATTRIBUTE_EXTERNAL_ID', 'external_id'); // will be overrridden by config setting in db if present
-define('OPEN311_NEW_STATUS',            'new'); // new Open311 requests into FMS-endpoint have this status
+define('OPEN311_ATTRIBUTE_EXTERNAL_ID',  'external_id'); // will be overrridden by config setting in db if present
+define('REPORT_DEFAULT_STATUS',          'new'); // new Open311 requests into FMS-endpoint have this status
+define('REPORT_UNKNOWN_STATUS_ID',       0); // used for incoming reports with unrecognised status 
 
 /* End of file constants.php */
 /* Location: ./system/application/config/constants.php */

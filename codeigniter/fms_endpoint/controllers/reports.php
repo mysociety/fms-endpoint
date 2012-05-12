@@ -63,8 +63,17 @@ class Reports extends Controller {
 		$phone = (!empty($_POST['phone'])) ? $_POST['phone'] : '';
 		$media_url = (!empty($_POST['media_url'])) ? $_POST['media_url'] : '';
 
+		$status = (!empty($_POST['status'])) ? $_POST['status'] : REPORT_DEFAULT_STATUS;
+		$status_lookup = $this->db->get_where('statuses', array('status_name' => trim(strtolower($status))), 1);
+		if ($status_lookup->num_rows()==1) {
+			$status = $status_lookup->row()->status_id;
+		} else {
+			$status_notes = "Received with unrecognised status: $status";
+			$status = REPORT_UNKNOWN_STATUS_ID;
+		}
+		
 		$data = array(
-			'status'				=> OPEN311_NEW_STATUS,
+			'status'				=> $status,
 			'category_id' 			=> $service_code      ,
 			'description' 			=> $description       ,
 			'lat'			 		=> $lat               ,
@@ -83,6 +92,9 @@ class Reports extends Controller {
 		
 		if (isset($external_id)) {
 			$data['external_id'] = $external_id;
+		}
+		if (isset($status_notes)) {
+			$data['status_notes'] = $status_notes;
 		}
 
 		$this->db->insert('reports', $data);

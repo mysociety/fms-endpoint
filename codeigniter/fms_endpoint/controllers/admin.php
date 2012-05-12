@@ -41,11 +41,11 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$this->db->from('reports');
 		$this->db->join('priorities', 'reports.priority = priorities.prio_value');
 		$this->db->join('categories', 'reports.category_id = categories.category_id');
+		$this->db->join('statuses', 'reports.status = statuses.status_id');
 		$this->db->where('report_id', $id);
 
 		$query = $this->db->get();
 		if ($query->num_rows()==1) {
-			//$data['report'] = $query->row();
 			$this->load->vars(array('report' => $query->row()));
 			$output = array('output' => $this->load->view('report', '', true));
 			$this->_admin_output($output);
@@ -103,6 +103,20 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		}
 	}
 
+	function statuses() {
+		if (!$this->ion_auth->is_admin()) {
+			redirect('admin/');
+		} else {
+			$crud = new grocery_CRUD();
+			$crud->set_theme('flexigrid'); 
+			$crud->set_table('statuses');
+			$crud->set_subject("problem status");
+			$output = $crud->render();
+			$this->_admin_output($output);
+			
+		}
+	}
+	
 	function about() {
 		$output = array('output' => $this->load->view('about', '', true));
 		$this->load->view('admin_view.php', $output);
@@ -131,6 +145,8 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$crud->set_relation('category_id','categories','category_name',null,'category_name ASC');
 		$crud->set_relation('priority','priorities',
 			'<span class="fmse-prio fmse-prio{prio_value}">{prio_name}</span>',null,'prio_value ASC');
+		$crud->set_relation('status','statuses',
+			'<span class="fmse-status-{is_closed}">{status_name}</span>',null,'status_name ASC');
 		$crud->callback_column('media_url',array($this,'_linkify'));
 		$crud->callback_edit_field('media_url', array($this,'_text_media_url_field'));  
 		$crud->display_as('requested_datetime', 'Received')

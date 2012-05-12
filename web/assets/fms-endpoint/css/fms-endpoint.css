@@ -225,3 +225,13 @@ ul.success_messages li p {
   padding-left: 20px;
   display: inline-block;
 }
+.fmse-status-0, .fmse-status-1 {
+  display:block;
+  padding: 2px 2px 2px 8px;
+}
+.fmse-status-0 {
+  background-color:#fdd;
+}
+.fmse-status-1 {
+  background-color:#dfd;
+}

@@ -5,7 +5,7 @@
 	</dl>
 	<dl class="report-data">
 		<dt>Status</dt>
-		<dd><?php echo($report->status)?></dd>
+		<dd class="fmse-status-<?php echo($report->is_closed)?>"><?php echo($report->status_name)?></dd>
 	</dl>
 	<dl class="report-data">
 		<dt>Status Notes</dt>
