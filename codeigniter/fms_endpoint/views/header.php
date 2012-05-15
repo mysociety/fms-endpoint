@@ -32,6 +32,7 @@
             <li><a class="admin-link" href='<?php echo site_url('admin/statuses')?>'>Statuses</a></li>
             <li><a class="admin-link" href='<?php echo site_url('admin/settings')?>'>Settings</a></li>
             <li><a class="admin-link" href='<?php echo site_url('admin/api_keys')?>'>API keys</a></li>
+            <li><a class="admin-link" href='<?php echo site_url('admin/open311_clients')?>'>Clients</a></li>
             <li><a class="admin-link" href='<?php echo site_url('auth/')?>'>Users</a></li>
           <?php } ?>
           <li id="current-user-nav"><?php if ($auth->is_admin()) {echo("&nbsp;admin&nbsp;");} ?><a class="user" href="<?php echo site_url('/auth/change_password')?>" title="change password"><?php echo $current_user_data->email ?></a><a href='<?php echo site_url('auth/logout')?>'>Logout</a>

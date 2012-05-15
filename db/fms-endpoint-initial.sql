@@ -191,6 +191,7 @@ CREATE TABLE `reports` (
   `agency_responsible` varchar(255) DEFAULT NULL,
   `service_notice` text,
   `token` varchar(255) DEFAULT NULL,
+  `external_url` text DEFAULT NULL,
   `external_id` varchar(255) DEFAULT NULL,
   `requested_datetime` datetime DEFAULT NULL,
   `updated_datetime` datetime DEFAULT NULL,
@@ -250,7 +251,18 @@ INSERT INTO `statuses` VALUES(7, 'fixed', 'problem is fixed', 1);
 INSERT INTO `statuses` VALUES(8, 'fixed - user', 'problem marked as fixed by public', 1);
 INSERT INTO `statuses` VALUES(9, 'fixed - council', 'problem marked as fixed by dept/council', 1);
 
-- --------------------------------------------------------
+
+CREATE TABLE `open311_clients` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `notes` text DEFAULT NULL,
+  `client_url` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+INSERT INTO `open311_clients` VALUES('1', 'Example client', 'don\'t use -- delete when live', 'http://www.example.com/report/%id%');
+
+
 
 --
 -- Table structure for table `api_keys`
@@ -258,12 +270,13 @@ INSERT INTO `statuses` VALUES(9, 'fixed - council', 'problem marked as fixed by 
 
 CREATE TABLE `api_keys` (
   `api_key` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `client_id` mediumint(8) NOT NULL,
   `notes` text,
    PRIMARY KEY (`api_key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 
-INSERT INTO `api_keys` VALUES('12345', 'example', 'don\'t use -- delete when live');
+INSERT INTO `api_keys` VALUES('12345', 1, 'don\'t use -- delete when live');
+
 

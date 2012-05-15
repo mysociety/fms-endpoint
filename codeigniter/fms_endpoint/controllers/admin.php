@@ -128,7 +128,23 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 			$crud = new grocery_CRUD();
 			$crud->set_theme('flexigrid'); 
 			$crud->set_table('api_keys');
-			$crud->set_subject("API keys");
+			$crud->set_subject("API key");
+			$crud->set_relation('client_id','open311_clients', 
+				'<a href="/admin/open311_clients/{id}">{name}</a>', null,'name ASC');
+			$crud->display_as('client_id', 'Client');
+			$output = $crud->render();
+			$this->_admin_output($output);
+		}
+	}
+
+	function open311_clients() {
+		if (!$this->ion_auth->is_admin()) {
+			redirect('admin/');
+		} else {
+			$crud = new grocery_CRUD();
+			$crud->set_theme('flexigrid'); 
+			$crud->set_table('open311_clients');
+			$crud->set_subject("Open311 client");
 			$output = $crud->render();
 			$this->_admin_output($output);
 		}
