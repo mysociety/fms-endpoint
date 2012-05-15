@@ -13,10 +13,10 @@
 | always be used to set the mode correctly.
 |
 */
-define('FILE_READ_MODE', 0644);
+define('FILE_READ_MODE',  0644);
 define('FILE_WRITE_MODE', 0666);
-define('DIR_READ_MODE', 0755);
-define('DIR_WRITE_MODE', 0777);
+define('DIR_READ_MODE',   0755);
+define('DIR_WRITE_MODE',  0777);
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +37,7 @@ define('FOPEN_WRITE_CREATE_STRICT', 			'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 
+define('OPEN311_SERVICE_BAD_API_KEY',    403);
 define('OPEN311_SERVICE_ID_NOT_FOUND',   404);
 define('OPEN311_SERVICE_ID_MISSING',     400);
 define('OPEN311_GENERAL_SERVICE_ERROR',  400);

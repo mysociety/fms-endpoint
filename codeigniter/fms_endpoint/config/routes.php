@@ -49,8 +49,5 @@ $route['services.(:any)'] = "categories/get_feed/$1";
 $route['requests/(:num).xml'] = "reports/get_xml_report/$1";
 $route['requests.(:any)'] = "reports/get_feed/$1";
 
-
-
-
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */

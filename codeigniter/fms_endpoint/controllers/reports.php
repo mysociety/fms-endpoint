@@ -17,6 +17,18 @@ class Reports extends Controller {
 	}
 
 	function post_report($format) {
+		$api_key = (!empty($_POST['api_key'])) ? $_POST['api_key'] : '';
+		if (is_config_true(config_item('open311_use_api_keys'))) {
+			if ($api_key == '') {
+				show_error("You must provide an API key to submit reports to this server.", OPEN311_SERVICE_BAD_API_KEY);
+			} else {
+				$api_key_lookup = $this->db->get_where('api_keys', array('api_key' => $api_key));
+				if ($api_key_lookup->num_rows()==0) {
+					show_error("The API key you provided (\"$api_key\") is not valid for this server.", OPEN311_SERVICE_BAD_API_KEY);
+				}
+			}
+		}
+
 		$service_code = (!empty($_POST['service_code'])) ? $_POST['service_code'] : '';
 		
 		if ($service_code != '') {
@@ -28,7 +40,7 @@ class Reports extends Controller {
 		 		} else {
 			show_error("Open311 problem reports must have a service code, but you didn't provide one.", OPEN311_SERVICE_ID_MISSING);		    
 		}
-				
+
 		if (config_item('open311_use_external_id')) {
 			$external_id_name = "".OPEN311_ATTRIBUTE_EXTERNAL_ID;
 			if (config_item('open311_attribute_external_id')) {

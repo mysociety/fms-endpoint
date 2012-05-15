@@ -22,6 +22,12 @@ body#fmse-admin {
     min-height: 66px;
     line-height: 66px;
 }
+
+/* explicitly inherit, because the databases CSS defines a fixed font size, gah */
+.fmse-nav a {
+  	font-size: inherit;
+}
+
 .fmse-nav ul {
     list-style: none;
     padding:0;
@@ -38,6 +44,10 @@ body#fmse-admin {
     text-decoration: none;
     padding: 4px 8px;
 }
+.fmse-nav ul li a.admin-link {
+  background-color: #533;  
+}
+
 .fmse-nav ul li a.user {
     background-color: #666;
     color: #fff;
@@ -117,6 +127,7 @@ a.fmse-web-link-fms {
 }
 .text-content  {
     line-height: 1.6em;
+    margin: 1em 3em;
 }
 .text-content ul li {
     margin: 0.666em;
@@ -177,23 +188,13 @@ ul.success_messages li p {
     display: block;
     margin-left:4em;
 }
-.open311-status {
- padding: 4px 8px 4px 4px;
- background-color:#eee;
- float:left;
-}
-.open311-status-off {
-  border-left: 1.25em solid #900;   
-}
-.open311-status-on {
-  border-left: 1.25em solid #060;   
-}
 .single-report {
   margin: 1em 0;
   position:relative;
 }
 .report-data {
 }
+
 .single-report dl {
   clear: both;
   padding: 0;
@@ -245,4 +246,25 @@ ul.success_messages li p {
 }
 .fmse-status-1 {
   background-color:#dfd;
+}
+
+.open311-status {
+ background-color:#eee;
+ float:left;
+}
+a.open311-status-off {
+  border-left: 1.25em solid #900;   
+}
+a.open311-status-on {
+  border-left: 1.25em solid #060;   
+}
+.open311-status a:hover {
+  border-left: 1.25em solid #000;   
+}  
+abbr {
+  border-bottom: 1px dotted #666;
+  cursor: pointer;
+}
+.admin-inline-text {
+  padding-left: 2em; font-size: 80%;
 }

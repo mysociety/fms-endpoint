@@ -121,8 +121,31 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		}
 	}
 	
+	function api_keys() {
+		if (!$this->ion_auth->is_admin()) {
+			redirect('admin/');
+		} else {
+			$crud = new grocery_CRUD();
+			$crud->set_theme('flexigrid'); 
+			$crud->set_table('api_keys');
+			$crud->set_subject("API keys");
+			$output = $crud->render();
+			$this->_admin_output($output);
+		}
+	}
+
 	function about() {
 		$output = array('output' => $this->load->view('about', '', true));
+		$this->load->view('admin_view.php', $output);
+	}
+	
+	function help() {
+		$output = array('output' => $this->load->view('help', '', true));
+		$this->load->view('admin_view.php', $output);
+	}
+
+	function open311() {
+		$output = array('output' => $this->load->view('open311', '', true));
 		$this->load->view('admin_view.php', $output);
 	}
 

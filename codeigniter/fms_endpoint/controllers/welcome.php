@@ -44,7 +44,8 @@ END_OF_HTML;
 			array_push($details, $msg);	
  		} else {
 			
-			$TABLES_TO_CHECK = array('config_settings', 'users', 'categories', 'groups', 'priorities', 'reports', 'users_groups' );
+			// not checking category_attributes, because we're not using it yet (?)
+			$TABLES_TO_CHECK = array('api_keys', 'categories', 'config_settings', 'groups', 'priorities', 'reports', 'statuses', 'users', 'users_groups');
 
 			$bad_tables = array();
 			foreach ($TABLES_TO_CHECK as $tab) {
@@ -136,6 +137,7 @@ END_OF_HTML;
 			$this->load->view('welcome_message', $data);
 		}
 	}
+		
 }
 
 /* End of file welcome.php */

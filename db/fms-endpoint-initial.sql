@@ -250,3 +250,20 @@ INSERT INTO `statuses` VALUES(7, 'fixed', 'problem is fixed', 1);
 INSERT INTO `statuses` VALUES(8, 'fixed - user', 'problem marked as fixed by public', 1);
 INSERT INTO `statuses` VALUES(9, 'fixed - council', 'problem marked as fixed by dept/council', 1);
 
+- --------------------------------------------------------
+
+--
+-- Table structure for table `api_keys`
+--
+
+CREATE TABLE `api_keys` (
+  `api_key` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `notes` text,
+   PRIMARY KEY (`api_key`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+
+INSERT INTO `api_keys` VALUES('12345', 'example', 'don\'t use -- delete when live');
+
