@@ -38,6 +38,9 @@ body#fmse-admin {
     padding: 0;
     margin: 0 0.333em 0 0;
 }
+.fmse-nav ul li.help-link {
+  float: right;
+}
 .fmse-nav ul li a {
     background-color: #333;
     color: #fff;

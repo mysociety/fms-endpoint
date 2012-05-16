@@ -43,6 +43,9 @@
             <li style="float:right;"><a href='<?php echo site_url('auth/login')?>'>Login</a></li>
           <?php } ?>
         <?php }  ?>
+		<li class="help-link">
+	    	<a href='<?php echo site_url('admin/help')?>' class="fmse-mysoc">help</a>
+		</li>
       </ul>
     </div>
   </div>
