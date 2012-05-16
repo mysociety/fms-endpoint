@@ -51,6 +51,10 @@ class Reports extends Controller {
 			}
 			// external_id masquerading as an Open311 attribute, sadly not in Open311 spec yet
 			$external_id = (!empty($_POST['attrib'][$external_id_name])) ? trim($_POST['attrib'][$external_id_name]) : '';
+			// be generous with the attribute query variable name (accept attrib or attribute)
+			if ($external_id == '') {
+				$external_id = (!empty($_POST['attribute'][$external_id_name])) ? trim($_POST['attribute'][$external_id_name]) : '';
+			}
 			if ($external_id == '' && strtolower(config_item('open311_use_external_id')) == 'always') {
 				show_error("This server requires that your ID (e.g., your report number) appears in the request as " 
 					. $external_id_name . " but you didn't provide one.", OPEN311_EXTERNAL_ID_MISSING);
