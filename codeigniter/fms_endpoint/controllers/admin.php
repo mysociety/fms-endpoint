@@ -115,6 +115,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 			$crud->set_theme('flexigrid'); 
 			$crud->set_table('statuses');
 			$crud->set_subject("problem status");
+			$crud->unset_texteditor('description');
 			$output = $crud->render();
 			$this->_admin_output($output);
 			
@@ -132,6 +133,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 			$crud->set_relation('client_id','open311_clients', 
 				'<a href="/admin/open311_clients/{id}">{name}</a>', null,'name ASC');
 			$crud->display_as('client_id', 'Client');
+			$crud->unset_texteditor('notes');
 			$output = $crud->render();
 			$this->_admin_output($output);
 		}
@@ -145,6 +147,8 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 			$crud->set_theme('flexigrid'); 
 			$crud->set_table('open311_clients');
 			$crud->set_subject("Open311 client");
+			$crud->unset_texteditor('notes','client_url');
+			$crud->callback_edit_field('client_url', array($this,'_text_client_url_field'));  
 			$output = $crud->render();
 			$this->_admin_output($output);
 		}
@@ -194,17 +198,17 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 			'<a href="/admin/open311_clients/{id}">{name}</a>', null,'name ASC');
 		$crud->display_as('client_id', 'Client');
 		$crud->callback_column('media_url',array($this,'_linkify'));
+		$crud->callback_column('external_id', array($this, '_get_external_url'));
 		$crud->callback_edit_field('media_url', array($this,'_text_media_url_field'));  
 		$crud->display_as('requested_datetime', 'Received')
 			->display_as('updated_datetime', 'Updated')
 			->display_as('expected_datetime', 'Expected')		
 			->display_as('category_id', 'Category')
-			->display_as('media_url', 'URL')
-			->display_as('external_id', 'FMS ID');
+			->display_as('media_url', 'Media URL')
+			->display_as('external_id', 'External ID');
 		$crud->unset_texteditor('address', 'status_notes', 'service_notice');
 		$crud->add_action('View', '/assets/fms-endpoint/images/report.png', 'admin/report');
 		
-		$crud->callback_column('external_id', array($this, '_get_external_url'));
 		$crud->callback_column('xxx_report_id', array($this, '_report_id_link_field'));
 		$crud->display_as('xxx_report_id', 'ID');
 		$crud->callback_edit_field('xxx_report_id', array($this, '_read_only_report_id_field'));
@@ -232,20 +236,19 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 
 	function _text_value_field($value, $primary_key) { return $this->_text_field('value', $value); }
 	function _text_media_url_field($value, $primary_key) { return $this->_text_field('media_url', $value); }
+	function _text_client_url_field($value, $primary_key) { return $this->_text_field('client_url', $value); }
 	function _text_keywords_field($value, $primary_key) { return $this->_text_field('keywords', $value); }
 	function _text_field($name, $value) {
 		return '<input type="text" value="' . $value . '" name="' . $name . '"/>';
 	}
 
-	function _linkify($value, $row, $link_text='link') {
+	// turn the value (assumed to be a good URL) into a link
+	// class of link varies if it looks like this is a fixmystreet-like link, heheh
+	function _linkify($url, $row, $link_text='link') {
 		$retval = '';
-		if ($value) {
-			if (preg_match('/https?:\/\/(\\w*\\.)fixmy/', $value)) {
-				$retval = 'fmse-web-link-fms';
-			} else {
-				$retval = 'fmse-web-link';
-			}
-			$retval = '<a href="' . $value . '" class="' . $retval . '" target="_blank">' . $link_text . '</a>';
+		if ($url) {
+			$css_class = (preg_match('/https?:\/\/(\\w*\\.)*fixmy/', $url))? 'fmse-web-link-fms':'fmse-web-link';
+			$retval = '<a href="' . $url . '" class="' . $css_class . '" target="_blank">' . $link_text . '</a>';
 		}
 		return $retval;
 	}
@@ -260,7 +263,8 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		if ($client_lookup->num_rows()==0) {
 			return "";
 		} else if (!empty($row->external_id)) {
-			$url = preg_replace('/%id%/', $row->external_id, $client_lookup->row()->client_url);
+			$url = $client_lookup->row()->client_url;
+			$url = preg_replace('/%id%/', $row->external_id, $url);
 			$url = $this->_linkify($url, $row, $row->external_id);
 		}
 		return $url;
