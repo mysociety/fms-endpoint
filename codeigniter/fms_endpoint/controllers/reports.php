@@ -18,6 +18,7 @@ class Reports extends Controller {
 
 	function post_report($format) {
 		$api_key = (!empty($_POST['api_key'])) ? $_POST['api_key'] : '';
+		$source_client = null;
 		if (is_config_true(config_item('open311_use_api_keys'))) {
 			if ($api_key == '') {
 				show_error("You must provide an API key to submit reports to this server.", OPEN311_SERVICE_BAD_API_KEY);
@@ -25,6 +26,8 @@ class Reports extends Controller {
 				$api_key_lookup = $this->db->get_where('api_keys', array('api_key' => $api_key));
 				if ($api_key_lookup->num_rows()==0) {
 					show_error("The API key you provided (\"$api_key\") is not valid for this server.", OPEN311_SERVICE_BAD_API_KEY);
+				} else {
+					$source_client = $api_key_lookup->row()->client_id;
 				}
 			}
 		}
@@ -99,8 +102,13 @@ class Reports extends Controller {
 			'first_name' 			=> $first_name        ,
 			'last_name' 			=> $last_name         ,
 			'phone' 				=> $phone             ,
-			'media_url' 			=> $media_url
+			'media_url' 			=> $media_url         ,
+#			'source_client'         => $source_client
 		);
+		
+		if (isset($source_client)) {
+			$data['source_client'] = $source_client;
+		}
 		
 		if (isset($external_id)) {
 			$data['external_id'] = $external_id;

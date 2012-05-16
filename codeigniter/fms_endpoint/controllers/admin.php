@@ -173,7 +173,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$default_columns = array('report_id', 'status', 'requested_datetime', 'priority',  'category_id',
 			'external_id', 'media_url', 'status_notes', 'description', 'agency_responsible', 'service_notice',
 			'updated_datetime', 'expected_datetime', 'address', 'postal_code', 'lat', 'long',
-			'email', 'device_id', 'account_id', 'first_name', 'last_name', 'phone');
+			'email', 'device_id', 'source_client', 'account_id', 'first_name', 'last_name', 'phone');
 		$columns = $columns? $columns : $default_columns;
 		foreach ($columns as &$colname) {
 			if ($colname == 'report_id') {
@@ -190,6 +190,9 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 			'<span class="fmse-prio fmse-prio{prio_value}">{prio_name}</span>',null,'prio_value ASC');
 		$crud->set_relation('status','statuses',
 			'<span class="fmse-status-{is_closed}">{status_name}</span>',null,'status_name ASC');
+		$crud->set_relation('source_client','open311_clients', 
+			'<a href="/admin/open311_clients/{id}">{name}</a>', null,'name ASC');
+		$crud->display_as('client_id', 'Client');
 		$crud->callback_column('media_url',array($this,'_linkify'));
 		$crud->callback_edit_field('media_url', array($this,'_text_media_url_field'));  
 		$crud->display_as('requested_datetime', 'Received')
@@ -201,6 +204,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$crud->unset_texteditor('address', 'status_notes', 'service_notice');
 		$crud->add_action('View', '/assets/fms-endpoint/images/report.png', 'admin/report');
 		
+		$crud->callback_column('external_id', array($this, '_get_external_url'));
 		$crud->callback_column('xxx_report_id', array($this, '_report_id_link_field'));
 		$crud->display_as('xxx_report_id', 'ID');
 		$crud->callback_edit_field('xxx_report_id', array($this, '_read_only_report_id_field'));
@@ -233,7 +237,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		return '<input type="text" value="' . $value . '" name="' . $name . '"/>';
 	}
 
-	function _linkify($value, $row) {
+	function _linkify($value, $row, $link_text='link') {
 		$retval = '';
 		if ($value) {
 			if (preg_match('/https?:\/\/(\\w*\\.)fixmy/', $value)) {
@@ -241,7 +245,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 			} else {
 				$retval = 'fmse-web-link';
 			}
-			$retval = '<a href="' . $value . '" class="' . $retval . '" target="_blank">link</a>';
+			$retval = '<a href="' . $value . '" class="' . $retval . '" target="_blank">' . $link_text . '</a>';
 		}
 		return $retval;
 	}
@@ -250,6 +254,17 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		return $value = wordwrap($row->desc, strlen($row->desc), "<br>", true);
 	}
 
+    function _get_external_url($value, $row) {
+		$client_lookup = $this->db->get_where("open311_clients", array('id' => $row->source_client));
+		$url = '';
+		if ($client_lookup->num_rows()==0) {
+			return "";
+		} else if (!empty($row->external_id)) {
+			$url = preg_replace('/%id%/', $row->external_id, $client_lookup->row()->client_url);
+			$url = $this->_linkify($url, $row, $row->external_id);
+		}
+		return $url;
+	}
 }
 
 ?>

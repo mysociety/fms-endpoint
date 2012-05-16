@@ -191,7 +191,7 @@ CREATE TABLE `reports` (
   `agency_responsible` varchar(255) DEFAULT NULL,
   `service_notice` text,
   `token` varchar(255) DEFAULT NULL,
-  `external_url` text DEFAULT NULL,
+  `source_client` mediumint(8) DEFAULT NULL,
   `external_id` varchar(255) DEFAULT NULL,
   `requested_datetime` datetime DEFAULT NULL,
   `updated_datetime` datetime DEFAULT NULL,
