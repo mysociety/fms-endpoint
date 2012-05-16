@@ -211,6 +211,12 @@ ul.success_messages li p {
   color: #666;
   border-right: 1px solid #fff;
 }
+.single-report .report-data .location-data dt,
+.single-report .report-data .time-data dt,
+.single-report .report-data .other-data dt {
+  background-color:#ccc;
+}
+
 .single-report .report-data dd {
   margin: 0 0 0 9em;
   padding: 0.25em;
