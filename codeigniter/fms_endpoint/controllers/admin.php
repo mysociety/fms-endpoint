@@ -206,8 +206,9 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 			->display_as('updated_datetime', 'Updated')
 			->display_as('expected_datetime', 'Expected')		
 			->display_as('category_id', 'Category')
-			->display_as('media_url', 'Media URL')
-			->display_as('external_id', 'External ID');
+			->display_as('media_url', 'Media URL');
+		$external_id_col_name = config_item('external_id_col_name');
+		$crud->display_as('external_id', empty($external_id_col_name)?'External ID':$external_id_col_name);
 		$crud->unset_texteditor('address', 'status_notes', 'service_notice');
 		$crud->add_action('View', '/assets/fms-endpoint/images/report.png', 'admin/report');
 		

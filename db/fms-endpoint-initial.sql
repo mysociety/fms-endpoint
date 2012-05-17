@@ -79,7 +79,7 @@ INSERT INTO `config_settings` VALUES('enable_open311_server', 'yes', '<p>Is the 
 INSERT INTO `config_settings` VALUES('open311_use_external_id', 'always', '<p>Does the Open311 server demand that an external ID (such as FixMyStreet problem ID) is always provided? Suggested values:</p>\n<ul>\n<li>no</li>\n<li>optional</li>\n<li>always [default]</li>\n</ul>');
 INSERT INTO `config_settings` VALUES('open311_use_external_name', 'external_id', '<p>The name of the external ID that must be sent if <strong>open311_use_external_id</strong> is set to <em>yes</em>. Defaults to <em>external_id</em> if left blank. For example, use as <em>attrib[external_id]</em> in incoming reports.</li>\n</ul>');
 INSERT INTO `config_settings` VALUES('open311_use_api_keys', 'yes', '<p>Must all incoming report submissions provide a valid API key? Suggested values:</p>\n<ul>\n<li>no</li>\n<li>yes [default]</li>\n</ul><p>See <a href="/admin/api_keys">API keys config</a> to create or edit keys to use.');
-
+INSERT INTO `config_settings` VALUES('external_id_col_name', 'External ID', '<p>Name of external ID column on tables, which usually contains links to the external source of the report. If your endpoint is only accepting reports from a single Open311 client, it may be clearer to your users to change the column title to show this (e.g., "FixMyStreet").');
 
 
 -- --------------------------------------------------------
