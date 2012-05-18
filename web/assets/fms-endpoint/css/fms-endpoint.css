@@ -185,6 +185,17 @@ ul.success_messages li p {
 	background-color: #999;
 	font-weight: bold;   
 }
+
+.user_table tr.inactive {
+  color: #999;
+}
+.user_table tr td span.admin {
+  background-color: #933;
+  color: #fff;
+  padding: 0.2em;
+  display:block;
+}
+
 .code {
     font-family: monospace;
 }
