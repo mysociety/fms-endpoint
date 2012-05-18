@@ -19,7 +19,7 @@
 						<?php if(! is_config_true(config_item('enable_open311_server'))) { echo('not');}?>
 						running
 					</strong>
-					<?php if ($auth->logged_in()) { ?>
+					<?php if ($auth->is_admin()) { ?>
 						<span class="admin-inline-text">
 							<a href="settings/edit/enable_open311_server">
 								<?php if(is_config_true(config_item('enable_open311_server'))) { echo('disable');} else {echo('enable');} ?>
@@ -40,7 +40,7 @@
 						do not require an API key
 					<?php } ?>
 				</strong>
-				<?php if ($auth->logged_in()) { ?>
+				<?php if ($auth->is_admin()) { ?>
 					<span class="admin-inline-text">
 						<a href="settings/edit/open311_use_api_keys">change&nbsp;this</a>
 						|
@@ -60,7 +60,7 @@
 					<span class="code">attrib[<?php echo(config_item('open311_use_external_name')) ?>]</span>
 					
 				</strong>
-				<?php if ($auth->logged_in()) { ?>
+				<?php if ($auth->is_admin()) { ?>
 					<span class="admin-inline-text">
 						<a href="settings/edit/open311_use_api_keys">change&nbsp;setting</a>
 						|
