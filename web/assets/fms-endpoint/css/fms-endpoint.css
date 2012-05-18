@@ -169,6 +169,7 @@ ul.success_messages li p {
 }
 .user_table {
     border-collapse: collapse;
+    margin-top: 1em;
 }
 .user_table tr {
 	border-top: 1px solid #fff;
