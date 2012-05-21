@@ -24,7 +24,8 @@ index.php and assets/) should be placed under your webserver's server root:
   other things you might already be running on the webserver
 
 The web/ directory also contains an fcgi/ directory -- if you're not using
-FastCGI on your webserver you can ignore this.
+FastCGI on your webserver you can ignore this, otherwise copy that to be
+alongside assets/ too).
 
 
 Edit the CodeIgniter $system_folder setting
@@ -33,6 +34,8 @@ Edit the CodeIgniter $system_folder setting
 You can skip this step if your web/ directory is in the same directory as the
 codeigniter/ directory (that is, if the relative path to codeigniter/ from
 index.php hasn't changed).
+
+Otherwise, edit web/index.php and change the $system_folder setting:
 
    * $system_folder = "../codeigniter";
 
