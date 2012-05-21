@@ -8,15 +8,28 @@
 | URL to your CodeIgniter root. Typically this will be your base URL,
 | WITH a trailing slash:
 |
-|	http://example.com/
+|	http://example.com/your_path/
+|   or
+|   http://example.com/
 |
 */
-// $config['base_url']	= "";
+// note: if you set the base_url explicitly (such as the examples above), 
+//       comment the following two lines out, since they are auto-detecting the
+//       server's URL which isn't what you want if fms-endpoint isn't the only 
+//       thing running, in the root.
 
-// note: if you the base_url explicitly (above), comment this out, since it's auto-detecting
-//       which isn't what you want if fms-endpoint isn't the only thing running, in the root
+//------->>> so, either this... 
+
+// $config['base_url'] = 'http://example.com/your_path/';
+
+//------->>> ...or these...
+
 $config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
 $config['base_url'] .= "://".$_SERVER['HTTP_HOST'];
+
+//------->>>  but not both!
+
+//-------     fms-endpoint: you probably don't need to edit anything below this!
 
 /*
 |--------------------------------------------------------------------------
