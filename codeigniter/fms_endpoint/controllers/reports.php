@@ -17,8 +17,9 @@ class Reports extends Controller {
 	}
 
 	function post_report($format) {
+		$source_client = config_item('default_client');
+
 		$api_key = (!empty($_POST['api_key'])) ? $_POST['api_key'] : '';
-		$source_client = null;
 		if (is_config_true(config_item('open311_use_api_keys'))) {
 			if ($api_key == '') {
 				show_error_xml("You must provide an API key to submit reports to this server.", OPEN311_SERVICE_BAD_API_KEY);
@@ -60,7 +61,11 @@ class Reports extends Controller {
 					. $external_id_name . "] but you didn't provide one.", OPEN311_EXTERNAL_ID_MISSING);
 			}
 			if ($external_id != '') {
-				$lookup = $this->db->get_where('reports', array('external_id' => $external_id)); 
+				$external_criteria = array('external_id' => $external_id);
+				if ($source_client && is_config_true(config_item('external_id_is_global'))) {
+					$external_criteria['source_client'] = $source_client;
+				}
+				$lookup = $this->db->get_where('reports', $external_criteria);
 				if ($lookup->num_rows() > 0) {
 					show_error_xml("External ID \"$external_id\" already exists here, so we're rejecting it as a duplicate submission.",
 				 		OPEN311_EXTERNAL_ID_DUPLICATE);
