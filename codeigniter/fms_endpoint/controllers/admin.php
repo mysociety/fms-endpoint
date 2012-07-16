@@ -43,7 +43,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$this->db->join('priorities', 'reports.priority = priorities.prio_value');
 		$this->db->join('categories', 'reports.category_id = categories.category_id');
 		$this->db->join('statuses', 'reports.status = statuses.status_id');
-		$this->db->join('open311_clients', 'reports.source_client = open311_clients.id');
+		$this->db->join('open311_clients', 'reports.source_client = open311_clients.id', 'left outer');
 		$this->db->where('report_id', $id);
 
 		$query = $this->db->get();
