@@ -4,7 +4,8 @@ Most of the software in this directory is Copyright (c) 2012 UK
 Citizens Online Democracy. 
 
 > For specific component licenses, see:
-> license-codeigniter.txt and license-grocery-crud.txt
+> documentation/license-codeigniter.txt and 
+> documenation/license-grocery-crud.txt
 > See the README.md for more attribution and links.
 
 Unless otherwise stated in particular files or directories, this

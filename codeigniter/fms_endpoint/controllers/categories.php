@@ -1,5 +1,7 @@
 <?php
 
+// the Categories are effectively "services" in Open311
+
 class Categories extends Controller {
 
 	function Categories() {
@@ -16,9 +18,7 @@ class Categories extends Controller {
 		$this->load->view('categories_xml', $data);
 	}
 
-
 	function get_feed($format) {
-		// check here for jurisdiction_id?
 		$url = parse_url($_SERVER['REQUEST_URI']);
 		if (array_key_exists('query', $url)) { 
 			parse_str($url['query'], $params);
@@ -29,7 +29,6 @@ class Categories extends Controller {
 			}
 		}
 		$data['categories'] = $this->db->get('categories');
-
  		switch ($format) {
 			case "xml":
 				$this->load->view('categories_xml', $data);
@@ -41,6 +40,10 @@ class Categories extends Controller {
 	}
 
 	function get_xml_category($category_id) {
+		$category_lookup = $this->db->get_where('categories', array('category_id' => $category_id));
+		if ($category_lookup->num_rows()==0) {
+			show_error_xml("No service found with id \"$category_id\".", OPEN311_SERVICE_ID_NOT_FOUND);
+		} 
 		$this->db->where('category_id', $category_id);
 		$this->db->order_by("order", "asc");
 		$data['attributes'] = $this->db->get('category_attributes');

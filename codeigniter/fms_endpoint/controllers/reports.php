@@ -17,15 +17,16 @@ class Reports extends Controller {
 	}
 
 	function post_report($format) {
+		$source_client = config_item('default_client');
+
 		$api_key = (!empty($_POST['api_key'])) ? $_POST['api_key'] : '';
-		$source_client = null;
 		if (is_config_true(config_item('open311_use_api_keys'))) {
 			if ($api_key == '') {
-				show_error("You must provide an API key to submit reports to this server.", OPEN311_SERVICE_BAD_API_KEY);
+				show_error_xml("You must provide an API key to submit reports to this server.", OPEN311_SERVICE_BAD_API_KEY);
 			} else {
 				$api_key_lookup = $this->db->get_where('api_keys', array('api_key' => $api_key));
 				if ($api_key_lookup->num_rows()==0) {
-					show_error("The API key you provided (\"$api_key\") is not valid for this server.", OPEN311_SERVICE_BAD_API_KEY);
+					show_error_xml("The API key you provided (\"$api_key\") is not valid for this server.", OPEN311_SERVICE_BAD_API_KEY);
 				} else {
 					$source_client = $api_key_lookup->row()->client_id;
 				}
@@ -37,11 +38,11 @@ class Reports extends Controller {
 		if ($service_code != '') {
 			$lookup = $this->db->get_where('categories', array('category_id' => $service_code)); 
 			if ($lookup->num_rows() == 0) {
-				show_error("You sent a service code of \"$service_code\", which is not recognised by this server.",
+				show_error_xml("You sent a service code of \"$service_code\", which is not recognised by this server.",
 				 	OPEN311_GENERAL_SERVICE_ERROR);
 			}
-		 		} else {
-			show_error("Open311 problem reports must have a service code, but you didn't provide one.", OPEN311_SERVICE_ID_MISSING);		    
+		} else {
+			show_error_xml("Open311 problem reports must have a service code, but you didn't provide one.", OPEN311_SERVICE_ID_MISSING);		    
 		}
 
 		if (config_item('open311_use_external_id')) {
@@ -50,19 +51,23 @@ class Reports extends Controller {
 				$external_id_name = config_item('open311_attribute_external_id');
 			}
 			// external_id masquerading as an Open311 attribute, sadly not in Open311 spec yet
-			$external_id = (!empty($_POST['attrib'][$external_id_name])) ? trim($_POST['attrib'][$external_id_name]) : '';
-			// be generous with the attribute query variable name (accept attrib or attribute)
+			$external_id = (!empty($_POST['attribute'][$external_id_name])) ? trim($_POST['attribute'][$external_id_name]) : '';
+			// be generous with the attribute query variable name (accept attribute or attrib)
 			if ($external_id == '') {
-				$external_id = (!empty($_POST['attribute'][$external_id_name])) ? trim($_POST['attribute'][$external_id_name]) : '';
+				$external_id = (!empty($_POST['attrib'][$external_id_name])) ? trim($_POST['attrib'][$external_id_name]) : '';
 			}
 			if ($external_id == '' && strtolower(config_item('open311_use_external_id')) == 'always') {
-				show_error("This server requires that your ID (e.g., your report number) appears in the request as " 
-					. $external_id_name . " but you didn't provide one.", OPEN311_EXTERNAL_ID_MISSING);
+				show_error_xml("This server requires that your ID (e.g., your report number) appears in the request as attribute[" 
+					. $external_id_name . "] but you didn't provide one.", OPEN311_EXTERNAL_ID_MISSING);
 			}
 			if ($external_id != '') {
-				$lookup = $this->db->get_where('reports', array('external_id' => $external_id)); 
+				$external_criteria = array('external_id' => $external_id);
+				if ($source_client && is_config_true(config_item('external_id_is_global'))) {
+					$external_criteria['source_client'] = $source_client;
+				}
+				$lookup = $this->db->get_where('reports', $external_criteria);
 				if ($lookup->num_rows() > 0) {
-					show_error("External ID \"$external_id\" already exists here, so we're rejecting it as a duplicate submission.",
+					show_error_xml("External ID \"$external_id\" already exists here, so we're rejecting it as a duplicate submission.",
 				 		OPEN311_EXTERNAL_ID_DUPLICATE);
 				}
 			}

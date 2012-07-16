@@ -24,7 +24,6 @@
 |
 */
 	$system_folder = "../codeigniter";
-//$system_folder = "/Users/beholder/mysociety/fms-endpoint/codeigniter";
 
 /*
 |---------------------------------------------------------------

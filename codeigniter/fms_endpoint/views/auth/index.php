@@ -14,14 +14,16 @@
 			<th>Status</th>
 		</tr>
 		<?php foreach ($users as $user):?>
-			<tr>
+			<tr class="<?php if (! $user->active) { echo 'inactive';} ?>">
 				<td><?php echo $user->first_name;?></td>
 				<td><?php echo $user->last_name;?></td>
 				<td><?php echo $user->email;?></td>
 				<td>
 					<?php foreach ($user->groups as $group):?>
-						<?php echo $group->name;?><br />
-	                <?php endforeach?>
+						<span <?php if ($group->name == 'admin') {echo('class="admin"'); } ?>>
+							<?php echo $group->name;?><br />
+						</span>
+					<?php endforeach?>
 				</td>
 				<td><?php echo ($user->active) ? anchor("auth/deactivate/".$user->id, 'Active') : anchor("auth/activate/". $user->id, 'Inactive');?></td>
 			</tr>

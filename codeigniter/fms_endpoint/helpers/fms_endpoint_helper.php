@@ -39,4 +39,28 @@ if ( ! function_exists('open311_enabled_or_error')) {
 	}
 }
 
+/**
+ * show_error_xml
+ *
+ * mimics show_error but with http status and simple error delivered in XML
+ * This should be friendlier to FixMyStreet
+ * Note: terminates execution
+ * 
+ * @access	public
+ * @return	none, but terminates execution
+ */	
+if ( ! function_exists('show_error_xml')) {
+	function show_error_xml($msg, $code) {
+		$CI =& get_instance();
+		$error['code'] = $code;
+		$error['description'] = $msg;
+		//$CI->output->set_content_type('xml');
+		$CI->output->set_status_header($code);
+		$CI->load->view('error_xml', $error);
+		$CI->output->_display(); // explicit flush so we can exit
+		exit();
+	}
+}
+
+
 ?>

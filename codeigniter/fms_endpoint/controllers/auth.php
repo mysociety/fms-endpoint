@@ -354,10 +354,13 @@ class Auth extends Controller {
 		$this->form_validation->set_rules('first_name', 'First Name', 'required|xss_clean');
 		$this->form_validation->set_rules('last_name', 'Last Name', 'required|xss_clean');
 		$this->form_validation->set_rules('email', 'Email Address', 'required|valid_email');
-		$this->form_validation->set_rules('phone1', 'First Part of Phone', 'required|xss_clean|min_length[3]|max_length[3]');
-		$this->form_validation->set_rules('phone2', 'Second Part of Phone', 'required|xss_clean|min_length[3]|max_length[3]');
-		$this->form_validation->set_rules('phone3', 'Third Part of Phone', 'required|xss_clean|min_length[4]|max_length[4]');
-		$this->form_validation->set_rules('company', 'Company Name', 'required|xss_clean');
+		
+		// FMS-endpoint: don't care about phone and company, don't validate
+		// $this->form_validation->set_rules('phone1', 'First Part of Phone', 'required|xss_clean|min_length[3]|max_length[3]');
+		// $this->form_validation->set_rules('phone2', 'Second Part of Phone', 'required|xss_clean|min_length[3]|max_length[3]');
+		// $this->form_validation->set_rules('phone3', 'Third Part of Phone', 'required|xss_clean|min_length[4]|max_length[4]');
+		// $this->form_validation->set_rules('company', 'Company Name', 'required|xss_clean');
+
 		$this->form_validation->set_rules('password', 'Password', 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]');
 		$this->form_validation->set_rules('password_confirm', 'Password Confirmation', 'required');
 
@@ -376,7 +379,7 @@ class Auth extends Controller {
 		if ($this->form_validation->run() == true && $this->ion_auth->register($username, $password, $email, $additional_data))
 		{ //check to see if we are creating the user
 			//redirect them back to the admin page
-			$this->session->set_flashdata('message', "User Created");
+			$this->session->set_flashdata('message', "<p>User Created</p>");
 			redirect("auth", 'refresh');
 		}
 		else
