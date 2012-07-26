@@ -51,7 +51,7 @@
 		<dl >
 			<dt>External</dt>
 			<dd>
-				<?php if (!empty($report->source_client)) { echo($report->name); } ?>
+				<?php if (!empty($report->source_client)) { echo($report->open311_clients_name); } ?>
 				<?php if (!empty($report->external_id)) { echo("ref: " . $report->external_id); } ?>
 			</dd>
 		</dl>
