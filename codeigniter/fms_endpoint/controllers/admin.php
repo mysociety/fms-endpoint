@@ -80,7 +80,7 @@ class Admin extends Controller { // not CI_Controller (XXX: old-CI)
 		$crud->unset_texteditor('description'); # maybe don't unset this one
 		$crud->unset_texteditor('status_notes','keywords');
 		$crud->required_fields('category_id','category_name');
-		$crud->set_rules('category_id', 'Category Identifier', 'numeric');
+		$crud->set_rules('category_id', 'Category Identifier', 'trim|alpha_numeric');
 
 		if (!($this->ion_auth->is_admin() || is_config_true($this->config->item('can_edit_categories')))) {
 			$crud->unset_delete();
