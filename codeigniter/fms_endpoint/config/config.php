@@ -14,7 +14,7 @@
 |
 */
 
-$config['base_url'] = 'http://fmse-local/';
+$config['base_url'] = '';
 
 
 
