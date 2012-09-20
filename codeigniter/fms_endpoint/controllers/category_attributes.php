@@ -1,9 +1,9 @@
 <?php
 
-class Category_attributes extends Controller {
+class Category_attributes extends CI_Controller {
 
 	function Category_attributes() {
-		parent::Controller();
+		parent::__construct();
 		$this->load->database();
 		$this->load->library('Ion_auth');
 		$this->load->helper('xml');

@@ -2,10 +2,10 @@
 
 // the Categories are effectively "services" in Open311
 
-class Categories extends Controller {
+class Categories extends CI_Controller {
 
 	function Categories() {
-		parent::Controller();
+		parent::__construct();
 		$this->load->database();
 		$this->load->library('Ion_auth');
 		$this->load->helper('xml');

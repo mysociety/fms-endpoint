@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Auth extends Controller {
+class Auth extends CI_Controller {
 
 	function __construct()
 	{
@@ -379,7 +379,7 @@ class Auth extends Controller {
 		if ($this->form_validation->run() == true && $this->ion_auth->register($username, $password, $email, $additional_data))
 		{ //check to see if we are creating the user
 			//redirect them back to the admin page
-			$this->session->set_flashdata('message', "<p>User Created</p>");
+			$this->session->set_flashdata('message', "<p>User Created</p>CI_Controller");
 			redirect("auth", 'refresh');
 		}
 		else

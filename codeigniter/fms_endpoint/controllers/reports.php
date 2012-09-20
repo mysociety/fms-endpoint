@@ -1,9 +1,9 @@
 <?php
 
-class Reports extends Controller {
+class Reports extends CI_Controller {
 
 	function Reports() {
-		parent::Controller();
+		parent::__construct();
 		$this->load->database();
 		$this->load->library('Ion_auth');
 		$this->load->helper('xml');

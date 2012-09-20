@@ -14,7 +14,7 @@
 |
 */
 
-$config['base_url'] = '';
+$config['base_url'] = 'http://fmse-local/';
 
 
 
@@ -25,6 +25,18 @@ if ($config['base_url']=='') {
   $config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
   $config['base_url'] .= "://".$_SERVER['HTTP_HOST'];
 }
+
+/*
+|--------------------------------------------------------------------------
+| Encryption Key
+|--------------------------------------------------------------------------
+|
+| If you use the Encryption class or the Sessions class with encryption
+| enabled you MUST set an encryption key.  See the user guide for info.
+|
+*/
+$config['encryption_key'] = "sdfhjkvnn38934JKnvv79343fvJKNrdE";
+
 
 //-------     fms-endpoint: you probably don't need to edit anything below this!
 
@@ -56,7 +68,7 @@ $config['index_page'] = "index.php";
 | 'ORIG_PATH_INFO'	Uses the ORIG_PATH_INFO
 |
 */
-$config['uri_protocol'] = "PATH_INFO";
+$config['uri_protocol'] = "AUTO";
 /*
 |--------------------------------------------------------------------------
 | URL suffix
@@ -162,7 +174,7 @@ $config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
 | use segment based URLs.
 |
 */
-$config['enable_query_strings'] = TRUE;
+$config['enable_query_strings'] = FALSE;
 $config['controller_trigger'] 	= 'c';
 $config['function_trigger'] 	= 'm';
 $config['directory_trigger'] 	= 'd'; // experimental not currently in use
@@ -221,17 +233,6 @@ $config['log_date_format'] = 'Y-m-d H:i:s';
 |
 */
 $config['cache_path'] = '';
-
-/*
-|--------------------------------------------------------------------------
-| Encryption Key
-|--------------------------------------------------------------------------
-|
-| If you use the Encryption class or the Sessions class with encryption
-| enabled you MUST set an encryption key.  See the user guide for info.
-|
-*/
-$config['encryption_key'] = "";
 
 /*
 |--------------------------------------------------------------------------

@@ -2,11 +2,11 @@
 /**
  * CodeIgniter
  *
- * An open source application development framework for PHP 4.3.2 or newer
+ * An open source application development framework for PHP 5.1.6 or newer
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -18,8 +18,7 @@
 /**
  * CodeIgniter Hooks Class
  *
- * Provides a mechanism to extend the base system without hacking.  Most of
- * this class is borrowed from Paul's Extension class in ExpressionEngine.
+ * Provides a mechanism to extend the base system without hacking.
  *
  * @package		CodeIgniter
  * @subpackage	Libraries
@@ -29,20 +28,35 @@
  */
 class CI_Hooks {
 
-	var $enabled 		= FALSE;
-	var $hooks   		= array();
+	/**
+	 * Determines wether hooks are enabled
+	 *
+	 * @var bool
+	 */
+	var $enabled		= FALSE;
+	/**
+	 * List of all hooks set in config/hooks.php
+	 *
+	 * @var array
+	 */
+	var $hooks			= array();
+	/**
+	 * Determines wether hook is in progress, used to prevent infinte loops
+	 *
+	 * @var bool
+	 */
 	var $in_progress	= FALSE;
 
 	/**
 	 * Constructor
 	 *
 	 */
-	function CI_Hooks()
+	function __construct()
 	{
 		$this->_initialize();
 		log_message('debug', "Hooks Class Initialized");
 	}
-  
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -50,10 +64,10 @@ class CI_Hooks {
 	 *
 	 * @access	private
 	 * @return	void
-	 */  
-  	function _initialize()
-  	{
-		$CFG =& load_class('Config');
+	 */
+	function _initialize()
+	{
+		$CFG =& load_class('Config', 'core');
 
 		// If hooks are not enabled in the config file
 		// there is nothing else to do
@@ -66,7 +80,15 @@ class CI_Hooks {
 		// Grab the "hooks" definition file.
 		// If there are no hooks, we're done.
 
-		@include(APPPATH.'config/hooks'.EXT);
+		if (defined('ENVIRONMENT') AND is_file(APPPATH.'config/'.ENVIRONMENT.'/hooks.php'))
+		{
+		    include(APPPATH.'config/'.ENVIRONMENT.'/hooks.php');
+		}
+		elseif (is_file(APPPATH.'config/hooks.php'))
+		{
+			include(APPPATH.'config/hooks.php');
+		}
+
 
 		if ( ! isset($hook) OR ! is_array($hook))
 		{
@@ -75,8 +97,8 @@ class CI_Hooks {
 
 		$this->hooks =& $hook;
 		$this->enabled = TRUE;
-  	}
-  
+	}
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -223,4 +245,4 @@ class CI_Hooks {
 // END CI_Hooks class
 
 /* End of file Hooks.php */
-/* Location: ./system/libraries/Hooks.php */
+/* Location: ./system/core/Hooks.php */

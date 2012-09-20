@@ -1,6 +1,6 @@
 <?php
 
-class Welcome extends Controller {
+class Welcome extends CI_Controller {
 
   /* 
    *  The Welcome class runs an inert home page (at the root of the application) to help
@@ -11,7 +11,7 @@ class Welcome extends Controller {
    */
 	
 	function Welcome() {
-		parent::Controller();
+		parent::__construct();
 	}
 
 	function index() {

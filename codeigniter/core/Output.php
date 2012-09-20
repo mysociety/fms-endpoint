@@ -2,11 +2,11 @@
 /**
  * CodeIgniter
  *
- * An open source application development framework for PHP 4.3.2 or newer
+ * An open source application development framework for PHP 5.1.6 or newer
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -28,19 +28,89 @@
  */
 class CI_Output {
 
-	var $final_output;
-	var $cache_expiration	= 0;
-	var $headers 			= array();
-	var $enable_profiler 	= FALSE;
+	/**
+	 * Current output string
+	 *
+	 * @var string
+	 * @access 	protected
+	 */
+	protected $final_output;
+	/**
+	 * Cache expiration time
+	 *
+	 * @var int
+	 * @access 	protected
+	 */
+	protected $cache_expiration	= 0;
+	/**
+	 * List of server headers
+	 *
+	 * @var array
+	 * @access 	protected
+	 */
+	protected $headers			= array();
+	/**
+	 * List of mime types
+	 *
+	 * @var array
+	 * @access 	protected
+	 */
+	protected $mime_types		= array();
+	/**
+	 * Determines wether profiler is enabled
+	 *
+	 * @var book
+	 * @access 	protected
+	 */
+	protected $enable_profiler	= FALSE;
+	/**
+	 * Determines if output compression is enabled
+	 *
+	 * @var bool
+	 * @access 	protected
+	 */
+	protected $_zlib_oc			= FALSE;
+	/**
+	 * List of profiler sections
+	 *
+	 * @var array
+	 * @access 	protected
+	 */
+	protected $_profiler_sections = array();
+	/**
+	 * Whether or not to parse variables like {elapsed_time} and {memory_usage}
+	 *
+	 * @var bool
+	 * @access 	protected
+	 */
+	protected $parse_exec_vars	= TRUE;
 
-
-	function CI_Output()
+	/**
+	 * Constructor
+	 *
+	 */
+	function __construct()
 	{
+		$this->_zlib_oc = @ini_get('zlib.output_compression');
+
+		// Get mime types for later
+		if (defined('ENVIRONMENT') AND file_exists(APPPATH.'config/'.ENVIRONMENT.'/mimes.php'))
+		{
+		    include APPPATH.'config/'.ENVIRONMENT.'/mimes.php';
+		}
+		else
+		{
+			include APPPATH.'config/mimes.php';
+		}
+
+
+		$this->mime_types = $mimes;
+
 		log_message('debug', "Output Class Initialized");
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Get Output
 	 *
@@ -48,14 +118,14 @@ class CI_Output {
 	 *
 	 * @access	public
 	 * @return	string
-	 */	
+	 */
 	function get_output()
 	{
 		return $this->final_output;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Set Output
 	 *
@@ -64,10 +134,12 @@ class CI_Output {
 	 * @access	public
 	 * @param	string
 	 * @return	void
-	 */	
+	 */
 	function set_output($output)
 	{
 		$this->final_output = $output;
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
@@ -80,7 +152,7 @@ class CI_Output {
 	 * @access	public
 	 * @param	string
 	 * @return	void
-	 */	
+	 */
 	function append_output($output)
 	{
 		if ($this->final_output == '')
@@ -91,6 +163,8 @@ class CI_Output {
 		{
 			$this->final_output .= $output;
 		}
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
@@ -105,59 +179,133 @@ class CI_Output {
 	 *
 	 * @access	public
 	 * @param	string
+	 * @param 	bool
 	 * @return	void
-	 */	
+	 */
 	function set_header($header, $replace = TRUE)
 	{
+		// If zlib.output_compression is enabled it will compress the output,
+		// but it will not modify the content-length header to compensate for
+		// the reduction, causing the browser to hang waiting for more data.
+		// We'll just skip content-length in those cases.
+
+		if ($this->_zlib_oc && strncasecmp($header, 'content-length', 14) == 0)
+		{
+			return;
+		}
+
 		$this->headers[] = array($header, $replace);
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
-	
+
+	/**
+	 * Set Content Type Header
+	 *
+	 * @access	public
+	 * @param	string	extension of the file we're outputting
+	 * @return	void
+	 */
+	function set_content_type($mime_type)
+	{
+		if (strpos($mime_type, '/') === FALSE)
+		{
+			$extension = ltrim($mime_type, '.');
+
+			// Is this extension supported?
+			if (isset($this->mime_types[$extension]))
+			{
+				$mime_type =& $this->mime_types[$extension];
+
+				if (is_array($mime_type))
+				{
+					$mime_type = current($mime_type);
+				}
+			}
+		}
+
+		$header = 'Content-Type: '.$mime_type;
+
+		$this->headers[] = array($header, TRUE);
+
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Set HTTP Status Header
 	 * moved to Common procedural functions in 1.7.2
-	 * 
+	 *
 	 * @access	public
-	 * @param	int 	the status code
-	 * @param	string	
+	 * @param	int		the status code
+	 * @param	string
 	 * @return	void
-	 */	
-	function set_status_header($code = '200', $text = '')
+	 */
+	function set_status_header($code = 200, $text = '')
 	{
 		set_status_header($code, $text);
+
+		return $this;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Enable/disable Profiler
 	 *
 	 * @access	public
 	 * @param	bool
 	 * @return	void
-	 */	
+	 */
 	function enable_profiler($val = TRUE)
 	{
 		$this->enable_profiler = (is_bool($val)) ? $val : TRUE;
+
+		return $this;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
+	/**
+	 * Set Profiler Sections
+	 *
+	 * Allows override of default / config settings for Profiler section display
+	 *
+	 * @access	public
+	 * @param	array
+	 * @return	void
+	 */
+	function set_profiler_sections($sections)
+	{
+		foreach ($sections as $section => $enable)
+		{
+			$this->_profiler_sections[$section] = ($enable !== FALSE) ? TRUE : FALSE;
+		}
+
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Set Cache
 	 *
 	 * @access	public
 	 * @param	integer
 	 * @return	void
-	 */	
+	 */
 	function cache($time)
 	{
 		$this->cache_expiration = ( ! is_numeric($time)) ? 0 : $time;
+
+		return $this;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Display Output
 	 *
@@ -170,46 +318,59 @@ class CI_Output {
 	 * benchmark timer so the page rendering speed and memory usage can be shown.
 	 *
 	 * @access	public
+	 * @param 	string
 	 * @return	mixed
-	 */		
+	 */
 	function _display($output = '')
-	{	
+	{
 		// Note:  We use globals because we can't use $CI =& get_instance()
 		// since this function is sometimes called by the caching mechanism,
 		// which happens before the CI super object is available.
 		global $BM, $CFG;
-		
+
+		// Grab the super object if we can.
+		if (class_exists('CI_Controller'))
+		{
+			$CI =& get_instance();
+		}
+
 		// --------------------------------------------------------------------
-		
+
 		// Set the output data
 		if ($output == '')
 		{
 			$output =& $this->final_output;
 		}
-		
+
 		// --------------------------------------------------------------------
-		
-		// Do we need to write a cache file?
-		if ($this->cache_expiration > 0)
+
+		// Do we need to write a cache file?  Only if the controller does not have its
+		// own _output() method and we are not dealing with a cache file, which we
+		// can determine by the existence of the $CI object above
+		if ($this->cache_expiration > 0 && isset($CI) && ! method_exists($CI, '_output'))
 		{
 			$this->_write_cache($output);
 		}
-		
+
 		// --------------------------------------------------------------------
 
 		// Parse out the elapsed time and memory usage,
 		// then swap the pseudo-variables with the data
 
-		$elapsed = $BM->elapsed_time('total_execution_time_start', 'total_execution_time_end');		
-		$output = str_replace('{elapsed_time}', $elapsed, $output);
-		
-		$memory	 = ( ! function_exists('memory_get_usage')) ? '0' : round(memory_get_usage()/1024/1024, 2).'MB';
-		$output = str_replace('{memory_usage}', $memory, $output);		
+		$elapsed = $BM->elapsed_time('total_execution_time_start', 'total_execution_time_end');
+
+		if ($this->parse_exec_vars === TRUE)
+		{
+			$memory	 = ( ! function_exists('memory_get_usage')) ? '0' : round(memory_get_usage()/1024/1024, 2).'MB';
+
+			$output = str_replace('{elapsed_time}', $elapsed, $output);
+			$output = str_replace('{memory_usage}', $memory, $output);
+		}
 
 		// --------------------------------------------------------------------
-		
+
 		// Is compression requested?
-		if ($CFG->item('compress_output') === TRUE)
+		if ($CFG->item('compress_output') === TRUE && $this->_zlib_oc == FALSE)
 		{
 			if (extension_loaded('zlib'))
 			{
@@ -221,7 +382,7 @@ class CI_Output {
 		}
 
 		// --------------------------------------------------------------------
-		
+
 		// Are there any server headers to send?
 		if (count($this->headers) > 0)
 		{
@@ -229,32 +390,34 @@ class CI_Output {
 			{
 				@header($header[0], $header[1]);
 			}
-		}		
+		}
 
 		// --------------------------------------------------------------------
-		
-		// Does the get_instance() function exist?
+
+		// Does the $CI object exist?
 		// If not we know we are dealing with a cache file so we'll
 		// simply echo out the data and exit.
-		if ( ! function_exists('get_instance'))
+		if ( ! isset($CI))
 		{
 			echo $output;
 			log_message('debug', "Final output sent to browser");
 			log_message('debug', "Total execution time: ".$elapsed);
 			return TRUE;
 		}
-	
+
 		// --------------------------------------------------------------------
 
-		// Grab the super object.  We'll need it in a moment...
-		$CI =& get_instance();
-		
 		// Do we need to generate profile data?
 		// If so, load the Profile class and run it.
 		if ($this->enable_profiler == TRUE)
 		{
-			$CI->load->library('profiler');				
-										
+			$CI->load->library('profiler');
+
+			if ( ! empty($this->_profiler_sections))
+			{
+				$CI->profiler->set_sections($this->_profiler_sections);
+			}
+
 			// If the output data contains closing </body> and </html> tags
 			// we will remove them and add them back after we insert the profile data
 			if (preg_match("|</body>.*?</html>|is", $output))
@@ -268,7 +431,7 @@ class CI_Output {
 				$output .= $CI->profiler->run();
 			}
 		}
-		
+
 		// --------------------------------------------------------------------
 
 		// Does the controller contain a function named _output()?
@@ -281,35 +444,37 @@ class CI_Output {
 		{
 			echo $output;  // Send it to the browser!
 		}
-		
+
 		log_message('debug', "Final output sent to browser");
-		log_message('debug', "Total execution time: ".$elapsed);		
+		log_message('debug', "Total execution time: ".$elapsed);
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Write a Cache File
 	 *
 	 * @access	public
+	 * @param 	string
 	 * @return	void
-	 */	
+	 */
 	function _write_cache($output)
 	{
-		$CI =& get_instance();	
+		$CI =& get_instance();
 		$path = $CI->config->item('cache_path');
-	
-		$cache_path = ($path == '') ? BASEPATH.'cache/' : $path;
-		
+
+		$cache_path = ($path == '') ? APPPATH.'cache/' : $path;
+
 		if ( ! is_dir($cache_path) OR ! is_really_writable($cache_path))
 		{
+			log_message('error', "Unable to write cache file: ".$cache_path);
 			return;
 		}
-		
+
 		$uri =	$CI->config->item('base_url').
 				$CI->config->item('index_page').
 				$CI->uri->uri_string();
-		
+
 		$cache_path .= md5($uri);
 
 		if ( ! $fp = @fopen($cache_path, FOPEN_WRITE_CREATE_DESTRUCTIVE))
@@ -317,9 +482,9 @@ class CI_Output {
 			log_message('error', "Unable to write cache file: ".$cache_path);
 			return;
 		}
-		
+
 		$expire = time() + ($this->cache_expiration * 60);
-		
+
 		if (flock($fp, LOCK_EX))
 		{
 			fwrite($fp, $expire.'TS--->'.$output);
@@ -331,73 +496,73 @@ class CI_Output {
 			return;
 		}
 		fclose($fp);
-		@chmod($cache_path, DIR_WRITE_MODE);
+		@chmod($cache_path, FILE_WRITE_MODE);
 
 		log_message('debug', "Cache file written: ".$cache_path);
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Update/serve a cached file
 	 *
 	 * @access	public
+	 * @param 	object	config class
+	 * @param 	object	uri class
 	 * @return	void
-	 */	
+	 */
 	function _display_cache(&$CFG, &$URI)
 	{
-		$cache_path = ($CFG->item('cache_path') == '') ? BASEPATH.'cache/' : $CFG->item('cache_path');
-			
-		if ( ! is_dir($cache_path) OR ! is_really_writable($cache_path))
-		{
-			return FALSE;
-		}
-		
+		$cache_path = ($CFG->item('cache_path') == '') ? APPPATH.'cache/' : $CFG->item('cache_path');
+
 		// Build the file path.  The file name is an MD5 hash of the full URI
 		$uri =	$CFG->item('base_url').
 				$CFG->item('index_page').
 				$URI->uri_string;
-				
+
 		$filepath = $cache_path.md5($uri);
-		
+
 		if ( ! @file_exists($filepath))
 		{
 			return FALSE;
 		}
-	
+
 		if ( ! $fp = @fopen($filepath, FOPEN_READ))
 		{
 			return FALSE;
 		}
-			
+
 		flock($fp, LOCK_SH);
-		
+
 		$cache = '';
 		if (filesize($filepath) > 0)
 		{
 			$cache = fread($fp, filesize($filepath));
 		}
-	
+
 		flock($fp, LOCK_UN);
 		fclose($fp);
-					
-		// Strip out the embedded timestamp		
+
+		// Strip out the embedded timestamp
 		if ( ! preg_match("/(\d+TS--->)/", $cache, $match))
 		{
 			return FALSE;
 		}
-		
+
 		// Has the file expired? If so we'll delete it.
 		if (time() >= trim(str_replace('TS--->', '', $match['1'])))
-		{ 		
-			@unlink($filepath);
-			log_message('debug', "Cache file has expired. File deleted");
-			return FALSE;
+		{
+			if (is_really_writable($cache_path))
+			{
+				@unlink($filepath);
+				log_message('debug', "Cache file has expired. File deleted");
+				return FALSE;
+			}
 		}
 
 		// Display the cache
 		$this->_display(str_replace($match['0'], '', $cache));
-		log_message('debug', "Cache file is current. Sending it to browser.");		
+		log_message('debug', "Cache file is current. Sending it to browser.");
 		return TRUE;
 	}
 
@@ -406,4 +571,4 @@ class CI_Output {
 // END Output Class
 
 /* End of file Output.php */
-/* Location: ./system/libraries/Output.php */
+/* Location: ./system/core/Output.php */
