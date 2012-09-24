@@ -161,8 +161,8 @@ is failing to extract the segments from the URI. You may be able to
 workaround this by changing the `$config['uri_protocol']` value in
 `codeigniter/fms_endpoint/config/config.php`  
 
-By default, `$config['uri_protocol']` is set to `AUTO`, but if that's not
-working for you, `PATH_INFO` may fix the problem.
+By default, `$config['uri_protocol']` is set to `PATH_INFO`, but if that's not
+working for you, `AUTO` may fix the problem.
 
 
 Final Things
