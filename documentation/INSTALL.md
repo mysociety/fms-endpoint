@@ -14,8 +14,8 @@ Install the files
 FMS-endpoint is a PHP CodeIgniter project.
 
 Place the contents of this git repository somewhere where your webserver will
-have access to it. Ideally, only the contents of the `web/` directory (that is,
-`index.php` and `assets/`) should be placed under your webserver's server root:
+have access to it. Ideally, only the contents of the `web/` directory (that
+is, `index.php` and `assets/`) should be placed under your webserver's server root:
 
 * if you intend to run FMS-endpoint as the *only* service for that webserver,
   you can deploy directly into the server root (or simply set your server
@@ -32,9 +32,9 @@ alongside `assets/` too.
 Edit the CodeIgniter $system_folder setting
 -------------------------------------------
 
-You can skip this step if your `web/` directory is in the same directory as the
-`codeigniter/` directory (that is, if the relative path to `codeigniter/` from
-`index.php` hasn't changed).
+You can skip this step if your `web/` directory is in the same directory as
+the `codeigniter/` directory (that is, if the relative path to `codeigniter/`
+from `index.php` hasn't changed).
 
 Otherwise, edit `web/index.php` and change the `$system_folder setting`:
 
@@ -42,17 +42,17 @@ Otherwise, edit `web/index.php` and change the `$system_folder setting`:
 
 This must point to the codeigniter directory in this repository. For example,
 in the default setup, this is `../codeigniter` because the `codeigniter/`
-directory is a sibling of `web/`. If you have moved them apart (which is OK, of
-course), make sure this setting has the correct path _from this index.php_ You
-can use an absolute or relative path here.
+directory is a sibling of `web/`. If you have moved them apart (which is OK,
+of course), make sure this setting has the correct path _from this index.php_
+You can use an absolute or relative path here.
 
 
 Edit the fms-endpoint base_url setting
 --------------------------------------
 
-You can skip this step if you have placed `index.php` in the server-root of your
-webserver, not in a subdirectory (that is, if `http://YOUR_DOMAIN/` should hit
-the `index.php` already).
+You can skip this step if you have placed `index.php` in the server-root of
+your webserver, not in a subdirectory (that is, if `http://YOUR_DOMAIN/`
+should hit the `index.php` already).
 
 Otherwise, make sure that fms-endpoint's core CodeIgniter config knows the URL
 to the root page:
@@ -67,8 +67,8 @@ Check the root page
 
 You should already be able to see the FMS-endpoint root page in your browser
 (it will be reporting that you haven't set up the database yet). If you don't 
-see such a page, double-check the setting for `$system_folder` -- if you're not 
-sure, use an absolute path.
+see such a page, double-check the setting for `$system_folder` -- if you're
+not  sure, use an absolute path.
 
 Depending on where you have installed `index.php`, the URL will be:
 
@@ -88,21 +88,32 @@ Populate that database with the initial values by importing
 
     db/fms-endpoint-initial.sql
 
-The SQL in that file is in mySQL dialect. You may need to translate it slightly 
-if you're running with a different flavour of SQL.
+The SQL in that file is in mySQL dialect. You may need to translate it
+slightly if you're running with a different flavour of SQL.
 
 
 Edit the database configuration
 -------------------------------
 
-Edit `codeigniter/fms_endpoint/config/database.php` and set the values necessary
-to access your database.
+The instructions here assume you are going to edit configuration settings
+within `codeigniter/fms_endpoint/config/` which is the usual place for
+CodeIgniter application config. This is probably the simplest way to get
+FMS-endpoint up and running.
+
+> However, be aware that these files are within the git repository.
+> This means you *may* run into problems in future releases of the
+> FMS-endpoint code. We provide an alternative mechanism (because it fits the
+> way we deploy our own servers at mySociety) which is described here:
+> `documentation/ALTERNATIVE_CONFIG.md`
+
+Edit `codeigniter/fms_endpoint/config/database.php` and set the values
+necessary to access your database.
 
 You probably only need to set values for the following:
 
     $db['default']['hostname'] = "localhost:8889";
-    $db['default']['username'] = "root";
-    $db['default']['password'] = "root";
+    $db['default']['username'] = "dbuser";
+    $db['default']['password'] = "the-password";
     $db['default']['database'] = "fms-endpoint";
     $db['default']['dbdriver'] = "mysql";
 
@@ -117,23 +128,41 @@ The root page shows what's not working yet. If FMS-endpoint is not complaining
 about the database connection, then it's working :-)
 
    * if you're getting a completely blank (empty) page, check that you didn't
-     break the PHP when you edited the configuration files (try `php -l filename` 
-     to check the syntax, for example)
+     break the PHP when you edited the configuration files 
+     (try `php -l filename` to check the syntax, for example)
 
-   * look in `codeigniter/logs` to see if there is a report in the most recently
-     updated log file
+   * look in `codeigniter/logs` to see if there is a report in the most
+     recently updated log file
 
+   * look in your webserver's error log to see if it's reporting a PHP
+     error
 
 
 Configure URL rewriting
 -----------------------
 
-FMS-endpoint generates URLs assuming that you've set up the webserver to rewrite
-its the URLs. The recommended rewrite rules for the Apache webserver can be found 
-in `/conf/httpd.conf`.
+FMS-endpoint generates URLs assuming that you've set up the webserver to
+rewrite its URLs. The recommended rewrite rules for the Apache webserver can
+be found in `/conf/httpd.conf`.
 
 If you're running FMS-endpoint under Apache, copy the contents of
 `/conf/httpd.conf` into your main `httpd.conf` file.
+
+(Alternatively, you can try use a `.htaccess` file instead. This part of the
+configuration is really down to CodeIgniter and your particular webserver,
+so if you run into problems -- especially with `.htaccess` -- you can find
+several different approaches and solutions on CodeIgniter forums.)
+
+You can't tell if your URL rewriting is working until you try to access a
+page that is not the root page -- a good test is to try to log in. If you
+cannot log in, but always find yourself at the root page (and perhaps see
+the URL includes duplicate items such as `auth/auth/auth`), then CodeIgniter
+is failing to extract the segments from the URI. You may be able to 
+workaround this by changing the `$config['uri_protocol']` value in
+`codeigniter/fms_endpoint/config/config.php`  
+
+By default, `$config['uri_protocol']` is set to `AUTO`, but if that's not
+working for you, `PATH_INFO` may fix the problem.
 
 
 Final Things
@@ -220,11 +249,11 @@ navigating to the pages in FMS-endpoint and clicking on the delete icon to the
 right of each item's listing.
 
 
-Working with FixMyStreet
-------------------------
+Working with a FixMyStreet Open311 client
+-----------------------------------------
 
-In order to work with clients running FixMyStreet variants, log in as the admin user
-and click on __Settings__, and use these values:
+In order to work with clients running FixMyStreet variants, log in as the
+admin user,	 click on __Settings__, and use these values:
 
   * `open311_use_api_keys` set to `yes`
   * `open311_use_external_id` set to `always`
@@ -233,5 +262,41 @@ and click on __Settings__, and use these values:
 This forces your FMS-endpoint to only accept FMS reports which provide the ID
 or ref from the client system that is reporting them. FixMyStreet clients can
 be configured to behave in this way.
+
+Next, you need to add the FixMyStreet client. Still as the admin user, click on __Clients__ and either edit the default one, or else create a new one.
+
+When you've done that, click on __API keys__ and create an API key for your
+new client. The key can be any string: ideally make this random or
+unpredictable. The API key is not really secure, but it deters speculative
+abuse since only requests with the API key will be honoured.
+
+We recommend you run your server over https and where possible enforce IP
+restrictions.
+
+This document does not describe how to configure the client, but in general,
+you need to be sure that the following behaviour is set up at the FixMyStreet
+end:
+
+   * FMS must have some concept of mapping problems to your server
+      * this may be by area
+      * it may be based on the category of the problem
+   * FMS will need to know the specifics of your server, including the
+     URL of the endpoint, and the API key it should send
+   * FMS must also be configured to send the FMS ID as an `external_id` 
+     attribute with every new problem report
+
+
+Keep in touch
+-------------
+
+Finally, if you're running FMS-endpoint, do let us know! 
+
+We maintain a site especially for helping people running FixMyStreet and
+related projects at [diy.mysociety.org](http://diy.mysociety.org)
+
+
+--[mySociety](http://www.mysociety.org)
+
+
 
 
