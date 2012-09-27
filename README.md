@@ -34,9 +34,9 @@ FixMyStreet-endpoint is written in PHP using the CodeIgniter framework. You
 should find it easy to install provided you have access to a webserver and a
 database.
 
-Although the code generally expects to be running under an Apache webserver
-with a mySQL database, it's easy to change these things if your system is
-different -- see the installation documentation:
+The code generally expects to be running under an Apache webserver with a
+mySQL database. It may be possible change these things if your system
+is different -- see the installation documentation:
 
 __Installation instructions:__ see `documentation/INSTALL.md`
 
@@ -80,7 +80,7 @@ FMS-endpoint is a [mySociety](http://www.mysociety.org/) project.
 This particular project has been made possible with funding from the World
 Bank. 
 
-__May-2012__ FMS-endpoint is currently a work-in-progress! 
+__Sept-2012__ FMS-endpoint is currently a work-in-progress! 
 Check https://github.com/mysociety/fms-endpoint for changes.
 
 

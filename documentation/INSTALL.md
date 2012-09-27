@@ -8,6 +8,10 @@ You'll need a webserver that's happy to run PHP, and a database. For example,
 Apache and mySQL works fine, but if your system is different you should be OK
 to change it -- see the configuration details further down in this file.
 
+__Note:__ because of a dependency in GroceryCRUD, it now seems that
+FMS-Endpoint will __only__ work nicely with mySQL and mySQLite databases.
+Ouch. We'll try to sort this out in future updates.
+
 Install the files
 -----------------
 
@@ -81,8 +85,10 @@ Depending on where you have installed `index.php`, the URL will be:
 Set up the database
 -------------------
 
-Create a database using your favourite database software -- CodeIgniter
-supports mySQL, MySQLi, Postgre SQL, ODBC, and MS SQL.
+Although CodeIgniter supports mySQL, MySQLi, Postgre SQL, ODBC, and MS SQL,
+FMS-endpoint probably will __only__ work with mySQL and mySQLi. This is
+because of a dependency in the GroceryCRUD plugin. We'll look into removing
+this dependency in the future.
 
 Populate that database with the initial values by importing
 
