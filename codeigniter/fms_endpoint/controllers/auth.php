@@ -379,7 +379,7 @@ class Auth extends CI_Controller {
 		if ($this->form_validation->run() == true && $this->ion_auth->register($username, $password, $email, $additional_data))
 		{ //check to see if we are creating the user
 			//redirect them back to the admin page
-			$this->session->set_flashdata('message', "<p>User Created</p>CI_Controller");
+			$this->session->set_flashdata('message', "<p>User Created</p>");
 			redirect("auth", 'refresh');
 		}
 		else
