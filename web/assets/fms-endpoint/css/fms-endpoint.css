@@ -289,3 +289,29 @@ abbr {
 .admin-inline-text {
   padding-left: 2em; font-size: 80%;
 }
+
+.login-form {
+    margin: 2em 0;
+    padding: 1em 0;
+    border-left: 3px solid #ff9900;
+    background-color: #eeb;
+}
+.login-form div{
+    margin: 0.5em;
+}
+.login-form label{
+    display: inline-block;
+    width: 8em;
+    text-align: right;
+    padding-right: 1em;
+}
+.login-form .login-submit {
+    margin: 0.5em 0 0 8em;
+    padding: 1em;    
+}
+.login-form input {
+    font-size: 130%;
+}
+.login-form .login-identity input {
+    width: 16em;
+}
