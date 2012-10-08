@@ -77,10 +77,11 @@ About mySociety
 
 FMS-endpoint is a [mySociety](http://www.mysociety.org/) project.
 
-This particular project has been made possible with funding from the World
-Bank. 
+This particular project has been made possible with funding from 
+[AusAid](http://www.ausaid.gov.au/), through the 
+[World Bank](http://www.worldbank.org). 
 
-__Sept-2012__ FMS-endpoint is currently a work-in-progress! 
+Oct-2012__ FMS-endpoint is currently a work-in-progress! 
 Check https://github.com/mysociety/fms-endpoint for changes.
 
 
