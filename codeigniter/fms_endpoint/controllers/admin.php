@@ -222,9 +222,22 @@ class Admin extends CI_Controller {
 		$crud->callback_column('xxx_report_id', array($this, '_report_id_link_field'));
 		$crud->display_as('xxx_report_id', 'ID');
 		$crud->callback_edit_field('xxx_report_id', array($this, '_read_only_report_id_field'));
+		
+		$crud->callback_before_update(array($this,'_fix_zero_prio_callback'));
+		
 		return $crud;
 	}
-	 
+	
+	// force the default priority (0) since the groceryCRUD drop-down for priority doesn't
+	// seem to auto-select an option if it's zero... hence it's returned from the form as
+	// NULL
+	function _fix_zero_prio_callback($post_array, $primary_key) {
+		if ($post_array['priority'] == null) {
+			$post_array['priority'] = FMSE_DEFAULT_REPORT_PRIORITY;
+		}
+		return $post_array;
+	}
+		
 	function _admin_output($output = null) {
 		$this->load->view('admin_view.php', $output);
 	}

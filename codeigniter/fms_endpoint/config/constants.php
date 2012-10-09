@@ -47,5 +47,6 @@ define('OPEN311_ATTRIBUTE_EXTERNAL_ID',  'external_id'); // will be overrridden 
 define('REPORT_DEFAULT_STATUS',          'new'); // new Open311 requests into FMS-endpoint have this status
 define('REPORT_UNKNOWN_STATUS_ID',       0); // used for incoming reports with unrecognised status 
 
+define('FMSE_DEFAULT_REPORT_PRIORITY',   0); // default priority is id=0 which should map to "Normal"
 /* End of file constants.php */
 /* Location: ./system/application/config/constants.php */
