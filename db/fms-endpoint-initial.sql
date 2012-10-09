@@ -294,6 +294,7 @@ CREATE TABLE `reports` (
   `last_name` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
   `media_url` text,
+  `engineer` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`report_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1000 ;
 
