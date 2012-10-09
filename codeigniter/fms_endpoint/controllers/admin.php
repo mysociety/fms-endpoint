@@ -186,7 +186,7 @@ class Admin extends CI_Controller {
 		$default_columns = array('report_id', 'status', 'requested_datetime', 'priority',  'category_id',
 			'external_id', 'media_url', 'status_notes', 'description', 'agency_responsible', 'service_notice',
 			'updated_datetime', 'expected_datetime', 'address', 'postal_code', 'lat', 'long',
-			'email', 'device_id', 'source_client', 'account_id', 'first_name', 'last_name', 'phone');
+			'email', 'device_id', 'source_client', 'account_id', 'first_name', 'last_name', 'phone','engineer');
 		$columns = $columns? $columns : $default_columns;
 		foreach ($columns as &$colname) {
 			if ($colname == 'report_id') {

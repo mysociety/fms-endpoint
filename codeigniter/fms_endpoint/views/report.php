@@ -60,7 +60,7 @@
 			<dd>
 				<?php if ($report->media_url ) { ?>
 					<a href="<?php echo("$report->media_url"); ?>"><?php echo("$report->media_url"); ?></a>
-				<? } ?>
+				<?php } ?>
 			</dd>
 		</dl>
 
@@ -113,6 +113,10 @@
 			<dl >
 				<dt>Service notice</dt>
 				<dd><?php echo($report->service_notice)?></dd>
+			</dl>
+			<dl >
+				<dt>Engineer</dt>
+				<dd><?php echo($report->engineer)?></dd>
 			</dl>
 		</div>
 	</div>
