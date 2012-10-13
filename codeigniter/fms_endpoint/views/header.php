@@ -15,12 +15,16 @@
     } ?>
   <link rel="stylesheet" type="text/css" href="/assets/fms-endpoint/css/fms-endpoint.css" />
   <link rel="stylesheet" type="text/css" href="/assets/fms-endpoint/css/print.css" media="print" />
+
+  <?php if (config_item('fmse_cobrand_name')) { ?>
+  	<link rel="stylesheet" type="text/css" href="/assets/<?php echo config_item('fmse_cobrand_name'); ?>/style.css" />
+  <?php } ?>
 </head>
 <body id="fmse-admin">
   <div class="fmse-header">
     <h1>
       <?php echo config_item('organisation_name'); ?>
-	  </h1>
+    </h1>
     <div class="fmse-nav">
       <ul>
         <?php if ($auth->logged_in()) { ?>
