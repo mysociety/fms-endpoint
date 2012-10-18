@@ -2,9 +2,9 @@
 
 // set these values for your own installation
 
-// ATTENTION!
-// if you've got a conf/general.yml file in place, any settings in
-// that will be OVERRIDING the settings you see here!
+// Important:
+// if you've got a conf/general.yml file in place, any settings 
+// in that file (with DB_ prefixes) will be OVERRIDING the settings you see here!
 // see ../../../documentation/ALTERNATIVE_CONFIG.md for details
 //==================================================================
 
@@ -13,9 +13,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = "localhost:8889";
-$db['default']['username'] = "root";
-$db['default']['password'] = "root";
-$db['default']['database'] = "fms-endpoint";
+$db['default']['username'] = "username";
+$db['default']['password'] = "the-password";
+$db['default']['database'] = "database-name";
 $db['default']['dbdriver'] = "mysql";
 
 $db['default']['dbprefix'] = "";
@@ -32,4 +32,9 @@ $db['default']['stricton'] = FALSE;
 
 //$db['default']['port'] = 8889;
 
+// get local values if they exist
+$db_array = load_general_config('db');
+foreach ($db_array as $key => $value) {
+    $db['default'][$key] = $value;
+}
 ?>

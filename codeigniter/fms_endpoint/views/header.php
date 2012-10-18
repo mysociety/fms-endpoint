@@ -16,8 +16,8 @@
   <link rel="stylesheet" type="text/css" href="/assets/fms-endpoint/css/fms-endpoint.css" />
   <link rel="stylesheet" type="text/css" href="/assets/fms-endpoint/css/print.css" media="print" />
 
-  <?php if (config_item('fmse_cobrand_name')) { ?>
-  	<link rel="stylesheet" type="text/css" href="/assets/<?php echo config_item('fmse_cobrand_name'); ?>/style.css" />
+  <?php if (config_item('cobrand_name')) { ?>
+  	<link rel="stylesheet" type="text/css" href="/assets/cobrands/<?php echo config_item('cobrand_name'); ?>/style.css" />
   <?php } ?>
 </head>
 <body id="fmse-admin">

@@ -6,8 +6,10 @@ class Admin extends CI_Controller {
 
 		parent::__construct();
 
+        $this->config->load('fms_endpoint', FALSE, TRUE);
 		/* Standard Libraries */
 		$this->load->database();
+		
 		$this->load->helper('url');
 
 		$this->load->helper('fms_endpoint');
@@ -18,6 +20,7 @@ class Admin extends CI_Controller {
 			redirect('auth/login');
 		}
 	}
+
 
 	function index() {
 		try{

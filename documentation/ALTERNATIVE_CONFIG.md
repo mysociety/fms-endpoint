@@ -8,25 +8,23 @@ files in that directory). This is the easiest way to get up and running,
 since this is the normal place for CodeIgniter configuration.
 
 However, those files are within the git repository, which means they *may*
-get changed in future versions of FMS-endpoint. If you prefer to keep your
-config separate form the code, like we do, then we provide an alternative
-mechanism for specifying configuration values:
+get changed in future versions of FMS-endpoint. If you might be pushing any 
+code back to us, or you simply prefer to keep your config separate from the
+code, like we do, then we provide an alternative mechanism for specifying
+configuration values:
 
 ---
 
 Put your configuration settings in `conf/general.yml`. 
 
-FMS-endpoint will
-read those and use them to override anything that is set in 
-`codeigniter/fms_endpoint/config/database.php`
+FMS-endpoint will read those and use them to override anything that is set in 
+`codeigniter/fms_endpoint/config/database.php` and
+`codeigniter/fms_endpoint/config/config.php`
 
----
-
-For an example of what this file should look like, see
+Note that database settings need to be prefixed with DB_ -- for an example 
+of what this file should look like, see: 
 `conf/general-example.yml`
 
-Note that this currently only works for your *database* configuration
-settings, but as it's the mechanism we at mySociety use for our own
-deployments, we might expand it to other config values as needed.
-
-
+Incidentally, it's in YAML format (that is, not a PHP/CodeIgniter config file)
+just because that's how our own server config rolls. For details of YAML, see:
+http://www.yaml.org/
