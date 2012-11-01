@@ -107,8 +107,8 @@ class Admin extends CI_Controller {
 		if (!($this->ion_auth->is_admin())) {
 			$crud->unset_delete();
 			$crud->unset_edit();
-			$crud->unset_add(); // TODO: disable: should only create elsewhere
 		} 
+		$crud->unset_add(); // disabled: should only be created by editing a report
 		$crud->columns('id', 'report_id', 'status_id', 'updated_at','update_desc', 'old_status');
 		$crud->set_subject('Service request updates');
 		$crud->set_relation('status_id','statuses',
@@ -252,7 +252,7 @@ class Admin extends CI_Controller {
 		$crud->callback_edit_field('xxx_report_id', array($this, '_read_only_report_id_field'));
 		
 		$crud->callback_before_update(array($this,'_fix_zero_prio_callback'));
-		$crud->callback_after_update(array($this, 'check_for_status_update_after'));
+		$crud->callback_after_update(array($this, '_check_for_status_update_after'));
 		
 		return $crud;
 	}
@@ -326,7 +326,7 @@ class Admin extends CI_Controller {
 		return $url;
 	}
 	
-	function check_for_status_update_after($post_array,$primary_key) {
+	function _check_for_status_update_after($post_array,$primary_key) {
 		if ($post_array['old_status'] != $post_array['status']) {
 			// create a status change record
 			$request_update = array(
