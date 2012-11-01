@@ -7,7 +7,10 @@
 	</h3>
 	<p>
 		This server implements <abbr title="work in progress!">some</abbr> of the 
-		<a href="http://wiki.open311.org/GeoReport_v2">Open311 GeoReport v2</a> specification.
+		<a href="http://wiki.open311.org/GeoReport_v2">Open311 GeoReport v2</a> specification
+		<span style="font-size:80%;">
+		<br/>(and this <a href="https://github.com/mysociety/fixmystreet/wiki/Open311-FMS---Proposed-differences-to-Open311">GET&nbsp;servicerequestupdates</a> extension)
+		</span>
 	</p>
 	<p>
 		This means that it receives incoming reports of civic problems, and also publishes them, via the Open311 API.

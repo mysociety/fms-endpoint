@@ -196,11 +196,11 @@ class Reports extends CI_Controller {
 		
 		if (!empty($_GET['start_date'])) {
 			$start_date = date("Y-m-d H:i:s", strtotime($_GET['start_date']));
-			$this->db->where('requested_datetime >=', $start_date);
+			$this->db->where('updated_at >=', $start_date);
 		}
 		if (!empty($_GET['end_date'])) {
 			$end_date = date("Y-m-d H:i:s", strtotime($_GET['end_date']));
-			$this->db->where('requested_datetime <=', $end_date);
+			$this->db->where('updated_at <=', $end_date);
 		}
 		
 		$data['query'] = $this->db->get('request_updates', 1000);
