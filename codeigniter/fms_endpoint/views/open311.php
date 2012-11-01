@@ -75,6 +75,7 @@
               <br/><?php echo(config_item('base_url')); ?>/services.xml
               <br/><?php echo(config_item('base_url')); ?>/requests/<i>&lt;report-id&gt;</i>.xml
               <br/><?php echo(config_item('base_url')); ?>/requests.xml
+              <br/><?php echo(config_item('base_url')); ?>/servicerequestupdates.xml
              </span>
 		</li>
 	</ul>

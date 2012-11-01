@@ -140,6 +140,9 @@ class Reports extends CI_Controller {
 	}
 
 	function get_feed($format) {
+		if (empty($format)) {
+			$format = 'xml';
+		}
 		if(array_key_exists('service_code', $_POST)) { // if we're receiving a POST report call.
 			return $this->post_report($format);
 		}
@@ -184,6 +187,32 @@ class Reports extends CI_Controller {
 		$this->db->where('report_id', $report_id);
 		$data['query'] = $this->db->get('reports');
 		$this->load->view('reports_post_response_xml', $data);
+	}
+	
+	function get_request_updates($format) {
+		if (!empty($_GET['jurisdiction_id'])) {
+			// TODO, currently ignoring jurisdiction
+		}
+		
+		if (!empty($_GET['start_date'])) {
+			$start_date = date("Y-m-d H:i:s", strtotime($_GET['start_date']));
+			$this->db->where('requested_datetime >=', $start_date);
+		}
+		if (!empty($_GET['end_date'])) {
+			$end_date = date("Y-m-d H:i:s", strtotime($_GET['end_date']));
+			$this->db->where('requested_datetime <=', $end_date);
+		}
+		
+		$data['query'] = $this->db->get('request_updates', 1000);
+		
+		switch ($format) {
+			case "xml":
+				$this->load->view('request_updates_xml', $data);
+				break;
+			case "json":
+				$this->load->view('request_updates_json', $data);
+				break;
+		}
 	}
 }
 

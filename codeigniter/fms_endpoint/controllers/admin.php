@@ -98,6 +98,32 @@ class Admin extends CI_Controller {
 
 		$this->_admin_output($output);
 	}
+	
+	function request_updates() {
+		$crud = new grocery_CRUD();
+		$crud->set_theme('flexigrid');
+		$crud->set_table('request_updates');
+		$crud->unset_texteditor('update_desc');
+		if (!($this->ion_auth->is_admin())) {
+			$crud->unset_delete();
+			$crud->unset_edit();
+			$crud->unset_add(); // TODO: disable: should only create elsewhere
+		} 
+		$crud->columns('id', 'report_id', 'status_id', 'updated_at','update_desc', 'old_status');
+		$crud->set_subject('Service request updates');
+		$crud->set_relation('status_id','statuses',
+			'<span class="fmse-status-{is_closed}">{status_name}</span>',null,'status_name ASC');
+		$crud->callback_column('report_id', array($this, '_report_id_link_field'));
+		$crud->display_as('id', 'Update ID');
+		$crud->display_as('report_id', 'Report');
+		$crud->display_as('old_status_id', 'Old status');
+		$crud->display_as('status_id', 'New status');
+		$crud->display_as('update_desc', 'Description of update');
+	    
+		$output = $crud->render();
+
+		$this->_admin_output($output);
+	}
 
 	function settings() {
 		if (!$this->ion_auth->is_admin()) {
@@ -130,7 +156,6 @@ class Admin extends CI_Controller {
 			$crud->unset_texteditor('description');
 			$output = $crud->render();
 			$this->_admin_output($output);
-			
 		}
 	}
 	
@@ -181,7 +206,7 @@ class Admin extends CI_Controller {
 		$this->load->view('admin_view.php', $output);
 	}
 
-	// There is some magic here: using xxx_report_id because we running callback_column directly
+	// There is some magic here: using xxx_report_id because running callback_column directly
 	// on report_id breaks other field renders (such as actions) that contain report_id.
 	function _set_common_report_crud($columns) {
 		$crud = new grocery_CRUD();
@@ -227,6 +252,7 @@ class Admin extends CI_Controller {
 		$crud->callback_edit_field('xxx_report_id', array($this, '_read_only_report_id_field'));
 		
 		$crud->callback_before_update(array($this,'_fix_zero_prio_callback'));
+		$crud->callback_after_update(array($this, 'check_for_status_update_after'));
 		
 		return $crud;
 	}
@@ -238,6 +264,10 @@ class Admin extends CI_Controller {
 		if ($post_array['priority'] == null) {
 			$post_array['priority'] = FMSE_DEFAULT_REPORT_PRIORITY;
 		}
+		
+		$this_record = $this->db->get_where('reports', array('report_id' => $primary_key))->row();
+		$post_array['old_status']=$this_record->status; // for detecting status changes
+		
 		return $post_array;
 	}
 		
@@ -294,6 +324,20 @@ class Admin extends CI_Controller {
 			$url = $this->_linkify($url, $row, $row->external_id);
 		}
 		return $url;
+	}
+	
+	function check_for_status_update_after($post_array,$primary_key) {
+		if ($post_array['old_status'] != $post_array['status']) {
+			// create a status change record
+			$request_update = array(
+				'report_id' => $primary_key,
+				'status_id' => $post_array['status'],
+				'old_status_id' => $post_array['old_status'],
+				'changed_by' => 0
+			);
+			$this->db->insert('request_updates', $request_update);
+		}
+		return true;
 	}
 }
 
