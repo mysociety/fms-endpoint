@@ -25,7 +25,7 @@ foreach($query->result() as $row) {
 	
 	xml_add_child($update, 'update_id', $row->id);
 	xml_add_child($update, 'service_request_id', $row->report_id);
-	xml_add_child($update, 'status', $row->status_id); // FIXME status name (?)
+	xml_add_child($update, 'status', strtoupper($row->status_name));
 	xml_add_child($update, 'updated_datetime', dateformat($row->updated_at));
 	xml_add_child($update, 'description', $row->update_desc);
 }

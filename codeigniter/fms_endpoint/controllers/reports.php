@@ -194,6 +194,8 @@ class Reports extends CI_Controller {
 			// TODO, currently ignoring jurisdiction
 		}
 		
+		$this->db->from('request_updates');
+		
 		if (!empty($_GET['start_date'])) {
 			$start_date = date("Y-m-d H:i:s", strtotime($_GET['start_date']));
 			$this->db->where('updated_at >=', $start_date);
@@ -203,7 +205,9 @@ class Reports extends CI_Controller {
 			$this->db->where('updated_at <=', $end_date);
 		}
 		
-		$data['query'] = $this->db->get('request_updates', 1000);
+		$this->db->join('statuses', 'request_updates.status_id = statuses.status_id');
+		
+		$data['query'] = $this->db->get();
 		
 		switch ($format) {
 			case "xml":
