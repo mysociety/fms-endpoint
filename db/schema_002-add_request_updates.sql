@@ -5,7 +5,7 @@ CREATE TABLE `request_updates` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `update_desc` text,
   `old_status_id` int(11) DEFAULT NULL,
-  `changed_by` int(11) NOT NULL,
+  `changed_by` int(11),
   PRIMARY KEY (`id`),
   KEY `report_id` (`report_id`,`status_id`,`updated_at`),
   KEY `changed_by` (`changed_by`)
