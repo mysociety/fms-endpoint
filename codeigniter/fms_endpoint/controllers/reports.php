@@ -189,12 +189,26 @@ class Reports extends CI_Controller {
 		$this->load->view('reports_post_response_xml', $data);
 	}
 	
-	function get_request_updates($format) {
+	function service_request_updates($format) {
+		switch ($_SERVER['REQUEST_METHOD']) {
+			case "GET":
+				$this->get_service_request_updates($format);
+				break;
+			case "POST":
+				$this->post_service_request_updates($format);
+				break;
+			default:
+				show_error("Method not supported", 400);
+		}
+	}
+	
+	function get_service_request_updates($format) {
 		if (!empty($_GET['jurisdiction_id'])) {
 			// TODO, currently ignoring jurisdiction
 		}
 		
 		$this->db->from('request_updates');
+		$this->db->where('is_outbound =', 1);
 		
 		if (!empty($_GET['start_date'])) {
 			$start_date = date("Y-m-d H:i:s", strtotime($_GET['start_date']));
@@ -218,6 +232,107 @@ class Reports extends CI_Controller {
 				break;
 		}
 	}
+
+	function post_service_request_updates($format) {
+		
+		// TODO|FIXME API key check
+
+		$service_request_id = (!empty($_POST['service_request_id'])) ? $_POST['service_request_id'] : null;
+		if (! $service_request_id) {
+			show_error_xml("service_request_id parameter is missing", OPEN311_GENERAL_SERVICE_ERROR);
+			exit;
+		} else {
+			$report_exists_check = $this->db->get_where('reports', array('report_id' => $service_request_id));
+			if ($report_exists_check->num_rows()==0) {
+				show_error_xml("Report with service_request_id=$service_request_id not found on this server", 
+					OPEN311_SERVICE_ID_MISSING);
+			}
+		}
+		
+		$remote_update_id = (!empty($_POST['update_id'])) ? $_POST['update_id'] : null;
+		if ($remote_update_id) {
+			$duplicate_check = $this->db->get_where('request_updates', array('remote_update_id' => $remote_update_id));
+			if ($duplicate_check->num_rows()>0) {
+				show_error_xml("Duplicate rejected: remote update_id=$remote_update_id has already " .
+					"been received by this server.", OPEN311_GENERAL_SERVICE_ERROR);
+			}
+		}
+
+		$status = (!empty($_POST['status'])) ? $_POST['status'] : null;
+		// TODO check it's a status we know about
+		$status_id = 0;
+		if (empty($status)) {
+			show_error_xml("Missing status parameter", OPEN311_GENERAL_SERVICE_ERROR);
+		} else {
+			$status_lookup = $this->db->get_where('statuses', array('status_name' => strtolower($status)));
+			if ($status_lookup->num_rows() == 1) {
+				$status_id = $status_lookup->row()->status_id;
+			}
+		}
+		if (empty($status_id)) {
+			show_error_xml("Status \"$status\" doesn't match any status known on this server.", OPEN311_GENERAL_SERVICE_ERROR);
+		}
+		
+		// remaining mandatory fields
+		$description = (!empty($_POST['description'])) ? $_POST['description'] : '';
+		$jurisdiction_id = (!empty($_POST['jurisdiction_id'])) ? $_POST['jurisdiction_id'] : '';
+		$updated_datetime = (!empty($_POST['updated_datetime'])) ? $_POST['updated_datetime'] : '';
+
+		// optional fields
+		$email = (!empty($_POST['email'])) ? $_POST['email'] : '';
+		$last_name = (!empty($_POST['last_name'])) ? $_POST['last_name'] : '';
+		$first_name = (!empty($_POST['first_name'])) ? $_POST['first_name'] : '';
+		$title = (!empty($_POST['title'])) ? $_POST['title'] : '';
+		$media_url = (!empty($_POST['media_url'])) ? $_POST['media_url'] : '';
+		$changed_by = (!empty($_POST['account_id'])) ? $_POST['account_id'] : '';
+		$changed_by_name = trim("$email $title $first_name $last_name");
+		
+		$update_data = array(
+			'is_outbound'			=> 0,  // this is an incoming status update
+			'report_id'				=> $service_request_id,
+			'remote_update_id'		=> $remote_update_id,
+			'status_id'				=> $status_id,
+			'update_desc'			=> $description,
+#			'source_client'         => $source_client
+		);
+
+		if (!empty($updated_datetime)) {
+			$update_data['updated_at'] = $updated_datetime;
+		} else {
+			$update_data['updated_at'] = gmdate('D, d M Y H:i:s', time());
+		}
+		
+		if (!empty($changed_by_name)) {
+			$update_data['changed_by_name'] = $changed_by_name;
+		}
+		if (!empty($changed_by)) {
+			$update_data['changed_by'] = $changed_by;
+		}
+		if (!empty($media_url)) {
+			$update_data['media_url'] = $media_url;
+		}
+
+		$this->db->insert('request_updates', $update_data);
+		$view_data = array(
+			'new_update_id' 		=> $this->db->insert_id()
+		);
+				
+		// now update the report itself
+		// Note: description and media URL isn't saved in the record
+		//       because they are stored in the update instead
+		//       TODO: add UI to actually see this data when inspecting the report itself
+		$report_data = array(
+		               'status' => $status_id
+		            );
+		$this->db->update('reports', $report_data, "report_id = $service_request_id");
+
+		switch ($format) {
+			case "xml":
+				$this->load->view('request_update_post_response_xml', $view_data);
+				break;
+		}
+	}
+
 }
 
 ?>

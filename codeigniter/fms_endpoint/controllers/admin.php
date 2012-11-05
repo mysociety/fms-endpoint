@@ -109,16 +109,19 @@ class Admin extends CI_Controller {
 			$crud->unset_edit();
 		} 
 		$crud->unset_add(); // disabled: should only be created by editing a report
-		$crud->columns('id', 'report_id', 'status_id', 'updated_at','update_desc', 'old_status');
+		$crud->columns('id', 'report_id', 'is_outbound', 'status_id', 'updated_at','update_desc', 'old_status', 'external_update_id');
 		$crud->set_subject('Service request updates');
 		$crud->set_relation('status_id','statuses',
 			'<span class="fmse-status-{is_closed}">{status_name}</span>',null,'status_name ASC');
 		$crud->callback_column('report_id', array($this, '_report_id_link_field'));
+		$crud->callback_column('is_outbound', array($this, '_yes_no_field'));
 		$crud->display_as('id', 'Update ID');
 		$crud->display_as('report_id', 'Report');
 		$crud->display_as('old_status_id', 'Old status');
 		$crud->display_as('status_id', 'New status');
 		$crud->display_as('update_desc', 'Description of update');
+		$crud->display_as('is_outbound', 'Outbound?');
+		$crud->display_as('remote_update_id', 'Remote<br/>update id');
 	    
 		$output = $crud->render();
 
@@ -297,6 +300,7 @@ class Admin extends CI_Controller {
 	function _text_field($name, $value) {
 		return '<input type="text" value="' . $value . '" name="' . $name . '"/>';
 	}
+	function _yes_no_field($value, $primary_key) { return ($value? "yes" : "no"); }
 
 	// turn the value (assumed to be a good URL) into a link
 	// class of link varies if it looks like this is a fixmystreet-like link, heheh
@@ -333,7 +337,9 @@ class Admin extends CI_Controller {
 				'report_id' => $primary_key,
 				'status_id' => $post_array['status'],
 				'old_status_id' => $post_array['old_status'],
-				'changed_by' => 0
+				'changed_by' => 0, // TODO this should be user ID
+				// 'changed_by_name' => ? // TODO this should be user email, etc
+				'is_outbound' => 1 // this is an *outbound* update, because we're sending it out to the client
 			);
 			$this->db->insert('request_updates', $request_update);
 		}
