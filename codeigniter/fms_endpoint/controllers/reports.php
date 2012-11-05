@@ -19,20 +19,8 @@ class Reports extends CI_Controller {
 	function post_report($format) {
 		$source_client = config_item('default_client');
 
-		$api_key = (!empty($_POST['api_key'])) ? $_POST['api_key'] : '';
-		if (is_config_true(config_item('open311_use_api_keys'))) {
-			if ($api_key == '') {
-				show_error_xml("You must provide an API key to submit reports to this server.", OPEN311_SERVICE_BAD_API_KEY);
-			} else {
-				$api_key_lookup = $this->db->get_where('api_keys', array('api_key' => $api_key));
-				if ($api_key_lookup->num_rows()==0) {
-					show_error_xml("The API key you provided (\"$api_key\") is not valid for this server.", OPEN311_SERVICE_BAD_API_KEY);
-				} else {
-					$source_client = $api_key_lookup->row()->client_id;
-				}
-			}
-		}
-
+		$api_key = (!empty($_POST['api_key'])) ? $_POST['api_key'] : null;
+		$source_client = $this->_get_source_client_from_api($api_key);
 		$service_code = (!empty($_POST['service_code'])) ? $_POST['service_code'] : '';
 		
 		if ($service_code != '') {
@@ -235,7 +223,8 @@ class Reports extends CI_Controller {
 
 	function post_service_request_updates($format) {
 		
-		// TODO|FIXME API key check
+		$api_key = (!empty($_POST['api_key'])) ? $_POST['api_key'] : null;
+		$source_client = $this->_get_source_client_from_api($api_key);
 
 		$service_request_id = (!empty($_POST['service_request_id'])) ? $_POST['service_request_id'] : null;
 		if (! $service_request_id) {
@@ -330,6 +319,22 @@ class Reports extends CI_Controller {
 			case "xml":
 				$this->load->view('request_update_post_response_xml', $view_data);
 				break;
+		}
+	}
+
+	
+	function _get_source_client_from_api($api_key) {
+		if (is_config_true(config_item('open311_use_api_keys'))) {
+			if (empty($api_key)) {
+				show_error_xml("You must provide an API key to submit reports to this server.", OPEN311_SERVICE_BAD_API_KEY);
+			} else {
+				$api_key_lookup = $this->db->get_where('api_keys', array('api_key' => $api_key));
+				if ($api_key_lookup->num_rows()==0) {
+					show_error_xml("The API key you provided (\"$api_key\") is not valid for this server.", OPEN311_SERVICE_BAD_API_KEY);
+				} else {
+					return $api_key_lookup->row()->client_id;
+				}
+			}
 		}
 	}
 
