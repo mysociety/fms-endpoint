@@ -282,7 +282,6 @@ class Reports extends CI_Controller {
 			'remote_update_id'		=> $remote_update_id,
 			'status_id'				=> $status_id,
 			'update_desc'			=> $description,
-#			'source_client'         => $source_client
 		);
 
 		if (!empty($updated_datetime)) {
@@ -299,6 +298,9 @@ class Reports extends CI_Controller {
 		}
 		if (!empty($media_url)) {
 			$update_data['media_url'] = $media_url;
+		}
+		if (!empty($source_client)) {
+			$update_data['source_client'] = $source_client;
 		}
 
 		$this->db->insert('request_updates', $update_data);
