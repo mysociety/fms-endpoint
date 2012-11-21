@@ -109,7 +109,7 @@ class Admin extends CI_Controller {
 			$crud->unset_edit();
 		} 
 		$crud->unset_add(); // disabled: should only be created by editing a report
-		$crud->columns('id', 'report_id', 'is_outbound', 'status_id', 'updated_at','update_desc', 'old_status', 'external_update_id');
+		$crud->columns('id', 'report_id', 'is_outbound', 'status_id', 'updated_at','update_desc', 'old_status_id', 'external_update_id');
 		$crud->set_subject('Service request updates');
 		$crud->set_relation('status_id','statuses',
 			'<span class="fmse-status-{is_closed}">{status_name}</span>',null,'status_name ASC');
@@ -268,9 +268,10 @@ class Admin extends CI_Controller {
 			$post_array['priority'] = FMSE_DEFAULT_REPORT_PRIORITY;
 		}
 		
+		// get the current status (from the db) and store it in $post_array, cos we'll check it
+		// immediately after the save to see if it's changed
 		$this_record = $this->db->get_where('reports', array('report_id' => $primary_key))->row();
 		$post_array['old_status']=$this_record->status; // for detecting status changes
-		
 		return $post_array;
 	}
 		
@@ -333,13 +334,20 @@ class Admin extends CI_Controller {
 	function _check_for_status_update_after($post_array,$primary_key) {
 		if ($post_array['old_status'] != $post_array['status']) {
 			// create a status change record
+			$desc = $this->config->item('organisation_name');
+			if  (empty($desc) ) {
+				$desc = "Status changed";
+			} else {
+				$desc = "Status changed by $desc";
+			}
 			$request_update = array(
 				'report_id' => $primary_key,
 				'status_id' => $post_array['status'],
 				'old_status_id' => $post_array['old_status'],
 				'changed_by' => 0, // TODO this should be user ID
 				// 'changed_by_name' => ? // TODO this should be user email, etc
-				'is_outbound' => 1 // this is an *outbound* update, because we're sending it out to the client
+				'is_outbound' => 1, // this is an *outbound* update, because we're sending it out to the client
+				'update_desc' => $desc //for now, don't send FMS empty descriptions, because it doesn't digest them nicely
 			);
 			$this->db->insert('request_updates', $request_update);
 		}
