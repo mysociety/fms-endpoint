@@ -334,11 +334,14 @@ class Admin extends CI_Controller {
 	function _check_for_status_update_after($post_array,$primary_key) {
 		if ($post_array['old_status'] != $post_array['status']) {
 			// create a status change record
-			$desc = $this->config->item('organisation_name');
-			if  (empty($desc) ) {
-				$desc = "Status changed";
-			} else {
-				$desc = "Status changed by $desc";
+			$desc = "Status changed";
+			$status_lookup = $this->db->get_where("statuses", array('status_id' => $post_array['status']));
+			if ($status_lookup->num_rows()==1) {
+				$desc = "Marked as \"" . $status_lookup->row()->status_name . '"';
+			} // else fail silently? 
+			$org = $this->config->item('organisation_name');
+			if  (! empty($org) ) {
+				$desc = "$desc by $org";
 			}
 			$request_update = array(
 				'report_id' => $primary_key,
