@@ -60,7 +60,10 @@ class Admin extends CI_Controller {
 			if (! preg_match('/\.(gif|jpe?g|png)$/', $image_url)) {
 				$image_url = false;
 			}
-			$this->load->vars(array('report' => $query->row(), 'image_url' => $image_url));
+			$this->load->vars(array(
+				'report' => $query->row(), 
+				'external_link' => $this->_get_external_url(null, $query->row()),
+				'image_url' => $image_url));
 			$output = array('output' => $this->load->view('report', '', true));
 			$this->_admin_output($output);
 		} else {

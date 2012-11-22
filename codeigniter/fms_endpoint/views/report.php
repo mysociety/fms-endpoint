@@ -5,7 +5,12 @@
 	<div class="report-data">
 		<dl >
 			<dt>Report ID</dt>
-			<dd><span class="report-id"><?php echo($report->report_id) ?></span></dd>
+			<dd><span class="report-id"><?php echo($report->report_id) ?></span>
+			<?php if (!empty($report->source_client)) {
+				echo($external_link); 
+			} ?>
+			
+			</dd>
 		</dl>
 		<dl >
 			<dt>Status</dt>
@@ -51,8 +56,10 @@
 		<dl >
 			<dt>External</dt>
 			<dd>
-				<?php if (!empty($report->source_client)) { echo($report->open311_clients_name); } ?>
-				<?php if (!empty($report->external_id)) { echo("ref: " . $report->external_id); } ?>
+				<?php if (!empty($report->source_client)) {
+					echo($report->open311_clients_name); 
+				}
+				if (!empty($report->external_id)) { echo(" ref: " . $report->external_id); } ?>
 			</dd>
 		</dl>
 		<dl >

@@ -239,6 +239,7 @@ ul.success_messages li p {
 .single-report span.report-id {
   font-weight: bold;
   font-size: 120%;
+  padding-right:2em; // allow for link to the right
 }
 .single-report img.image {
   position: absolute;
