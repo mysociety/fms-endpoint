@@ -25,7 +25,11 @@ foreach($query->result() as $row) {
 	
 	xml_add_child($update, 'update_id', $row->id);
 	xml_add_child($update, 'service_request_id', $row->report_id);
-	xml_add_child($update, 'status', strtoupper($row->status_name));
+	if (is_config_true($this->config->item('open311_simple_status_only'))) {
+		xml_add_child($update, 'status', ($row->is_closed ? "CLOSED" : "OPEN"));		
+	} else {
+		xml_add_child($update, 'status', strtoupper($row->status_name));
+	}
 	xml_add_child($update, 'updated_datetime', dateformat($row->updated_at));
 	xml_add_child($update, 'description', $row->update_desc);
 }
