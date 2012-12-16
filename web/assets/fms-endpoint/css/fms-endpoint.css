@@ -270,9 +270,27 @@ ul.success_messages li p {
   background-color:#dfd;
 }
 
+.departmental-link {
+    background-color:#eee;
+    float:left;    
+}
+.departmental-link a {
+    background-position: 0 0px;
+    background-repeat:no-repeat;
+    border-left: 1.25em solid #eea300;
+}
+.departmental-link a.fmse-web-link-fms {
+    background-image:url(../images/fms-link-on-yellow.png);
+    padding-left:28px;
+    display:inline;
+    min-height:auto;
+    border-left: none;
+}
+
 .open311-status {
  background-color:#eee;
  float:left;
+ margin-left:1em;
 }
 a.open311-status-off {
   border-left: 1.25em solid #900;   
