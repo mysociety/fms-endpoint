@@ -55,3 +55,8 @@
     </div>
   </div>
   <div class="fmse-content">
+  	<?php if ($auth->logged_in() && config_item('announcement_html')) { ?>
+		<div class="fmse-announcement">
+			<?php echo config_item('announcement_html'); ?>
+		</div>
+	<?php } ?>

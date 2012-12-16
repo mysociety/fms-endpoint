@@ -316,3 +316,8 @@ abbr {
 .login-form .login-identity input {
     width: 16em;
 }
+.fmse-announcement {
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    margin: 0.5em 0;
+}
