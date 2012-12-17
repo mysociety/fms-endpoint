@@ -222,6 +222,9 @@ class Reports extends CI_Controller {
 	}
 
 	function post_service_request_updates($format) {
+		if (! is_config_true(config_item('open311_allow_update_posts'))) {
+			show_error_xml("this server is currently configured to reject service_request_updates POSTs", OPEN311_GENERAL_SERVICE_ERROR);
+		}
 		
 		$api_key = (!empty($_POST['api_key'])) ? $_POST['api_key'] : null;
 		$source_client = $this->_get_source_client_from_api($api_key);
