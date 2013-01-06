@@ -278,6 +278,11 @@ CREATE TABLE `request_updates` (
   `update_desc` text,
   `old_status_id` int(11) DEFAULT NULL,
   `changed_by` int(11) NOT NULL,
+  `is_outbound` TINYINT(1) UNSIGNED NOT NULL,
+  `changed_by_name` VARCHAR(255),
+  `media_url` VARCHAR(255),
+  `remote_update_id` INTEGER,
+  `source_client` INTEGER DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `report_id` (`report_id`,`status_id`,`updated_at`),
   KEY `changed_by` (`changed_by`)
