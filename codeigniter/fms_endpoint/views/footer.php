@@ -4,7 +4,10 @@
 		$org_url = config_item('organisation_url');
 		if (! empty($org_url)) { ?>
 			<div class="departmental-link">
-				<a href="<?php echo $org_url; ?>" class="<?php echo (preg_match('/https?:\/\/(\\w*\\.)*fixmy/', $org_url))? 'fmse-web-link-fms':'fmse-web-link' ?>"><?php 
+				<a href="<?php echo $org_url; ?>" 
+					class="<?php echo (preg_match('/https?:\/\/(\\w*\\.)*fixmy/', $org_url))? 'fmse-web-link-fms':'fmse-web-link' ?>"
+					target="_blank"
+				><?php 
 				if (config_item('organisation_link_text')) {
 					echo config_item('organisation_link_text');
 				} else {
