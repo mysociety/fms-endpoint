@@ -126,6 +126,15 @@ if ( ! function_exists('open311_enabled_or_error')) {
 if ( ! function_exists('show_error_xml')) {
 	function show_error_xml($msg, $code) {
 		$CI =& get_instance();
+    
+    // TODO make logging conditional on config var?
+		$data = array(
+      'error_code'      => $code,
+			'error_msg'				=> $msg
+		);
+		$CI->db->insert('open311_error_log', $data);
+    // TODO purge surplus errors
+    
 		$error['code'] = $code;
 		$error['description'] = $msg;
 		//$CI->output->set_content_type('xml');

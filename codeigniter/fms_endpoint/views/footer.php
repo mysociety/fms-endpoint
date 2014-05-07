@@ -23,6 +23,13 @@
         <?php if(is_config_true(config_item('enable_open311_server'))) { echo('on');} else {echo('off');} ?>
       </a>
     </div>
+    <?php if(is_config_true(config_item('enable_open311_server'))) { ?>
+      <div style="float:left;margin-left:1em;">
+        <a href="/admin/errors">
+          Open311 errors
+        </a>
+      </div>
+    <?php } ?>
     <?php if ($auth->logged_in()) { ?>
       <a href='<?php echo site_url('admin/about')?>' class="fmse-mysoc">about</a>
     <?php } ?>

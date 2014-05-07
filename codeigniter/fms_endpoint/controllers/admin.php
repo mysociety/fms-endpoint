@@ -196,6 +196,28 @@ class Admin extends CI_Controller {
 			$this->_admin_output($output);
 		}
 	}
+  
+	function errors() {
+		if (!$this->ion_auth->is_admin()) {
+			redirect('admin/');
+		} else {
+			$crud = new grocery_CRUD();
+			$crud->set_theme('datatables');
+			$crud->set_table('open311_error_log');
+			$crud->set_subject("Open311 recent errors");
+			$crud->unset_delete();
+			$crud->unset_edit(); 
+  		$crud->unset_add();
+  		$crud->columns('created_at', 'error_code', 'error_msg'); //'api_key'
+			$crud->display_as('error_msg', 'Error message');
+			$crud->display_as('created_at', 'Timestamp');
+			$crud->display_as('api_key', 'API key');
+			$crud->callback_column('error_msg', array($this, '_full_error_msg'));
+  		$crud->order_by('created_at', 'desc');
+			$output = $crud->render();
+			$this->_admin_output($output);
+    }
+	}
 
 	function about() {
 		$output = array('output' => $this->load->view('about', '', true));
@@ -359,6 +381,11 @@ class Admin extends CI_Controller {
 		}
 		return true;
 	}
+  
+	function _full_error_msg($value, $row) {
+		return $value = wordwrap($row->error_msg, strlen($row->error_msg), "<br>", true);
+	}
+  
 }
 
 ?>

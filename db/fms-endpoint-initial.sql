@@ -331,3 +331,21 @@ CREATE TABLE `reports` (
 
 INSERT INTO `reports` VALUES(1000, 1, NULL, 0, '001', 'Hole in the road', NULL, NULL, NULL, 1, '99', '2012-05-01 12:00:00', NULL, '2012-05-02 13:00:00', 'Intersection of 22nd St and San Bruna Ave', NULL, NULL, 37.756954, -122.40473, 'a_user@example.com', NULL, NULL, 'Anne', 'Example', NULL, 'http://farm3.static.flickr.com/2002/2212426634_5ed477a060.jpg', null);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `open311_error_log`
+-- If you're using FMS-endpoint for testing your Open311 client (e.g., your
+-- own FixMyStreet website) and the reports aren't getting through, it's
+-- useful to be able to see why the FMS-endpoint is rejecting them. Open311
+-- errors are logged in this table.
+--
+CREATE TABLE `open311_error_log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `error_code` mediumint(8) unsigned,
+  `error_msg` text,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `api_key` varchar(255),
+  PRIMARY KEY (`log_id`),
+  KEY `created_at` (`created_at`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
