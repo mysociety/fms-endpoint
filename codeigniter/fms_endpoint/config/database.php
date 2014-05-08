@@ -13,9 +13,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = "localhost:8889";
-$db['default']['username'] = "beholder";
-$db['default']['password'] = "";
-$db['default']['database'] = "fms-endpoint";
+$db['default']['username'] = "username";
+$db['default']['password'] = "the-password";
+$db['default']['database'] = "database-name";
 $db['default']['dbdriver'] = "mysql";
 
 $db['default']['dbprefix'] = "";
