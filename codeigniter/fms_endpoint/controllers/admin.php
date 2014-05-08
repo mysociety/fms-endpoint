@@ -205,7 +205,6 @@ class Admin extends CI_Controller {
 			$crud->set_theme('datatables');
 			$crud->set_table('open311_error_log');
 			$crud->set_subject("Open311 recent errors");
-			$crud->unset_delete();
 			$crud->unset_edit(); 
   		$crud->unset_add();
   		$crud->columns('created_at', 'error_code', 'error_msg'); //'api_key'
