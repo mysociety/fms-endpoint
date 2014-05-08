@@ -308,7 +308,11 @@ a.open311-status-on {
 }
 .open311-status a:hover {
   border-left: 1.25em solid #000;   
-}  
+}
+.open311-error-link {
+  float:left;
+  margin-left:1em;
+}
 abbr {
   border-bottom: 1px dotted #666;
   cursor: pointer;

@@ -17,15 +17,15 @@
 		</div>
 	<?php } ?>
     <div class="open311-status">
-      <a href="/admin/open311" 
+      <a href="<?php echo site_url('admin/open311')?>" 
         class="open311-status-<?php if(is_config_true(config_item('enable_open311_server'))) { echo('on');} else {echo('off');} ?>">
         Open311 server is
         <?php if(is_config_true(config_item('enable_open311_server'))) { echo('on');} else {echo('off');} ?>
       </a>
     </div>
     <?php if(is_config_true(config_item('enable_open311_server'))) { ?>
-      <div style="float:left;margin-left:1em;">
-        <a href="/admin/errors">
+      <div class="open311-error-link">
+        <a href="<?php echo site_url('admin/errors')?>">
           Open311 errors
         </a>
       </div>
