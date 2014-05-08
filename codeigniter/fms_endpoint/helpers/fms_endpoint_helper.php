@@ -128,12 +128,24 @@ if ( ! function_exists('show_error_xml')) {
 		$CI =& get_instance();
     
     // TODO make logging conditional on config var?
-		$data = array(
-      'error_code'      => $code,
-			'error_msg'				=> $msg
-		);
-		$CI->db->insert('open311_error_log', $data);
-    // TODO purge surplus errors
+    $config_result = $CI->db->get_where('config_settings', array('name' => 'max_errors_logged'));
+    $max_errors_logged = $config_result->row()->value;
+    if ($max_errors_logged > 0) {
+  		$data = array(
+        'error_code'      => $code,
+  			'error_msg'				=> $msg
+  		);
+  		$CI->db->insert('open311_error_log', $data);
+      $error_count = $CI->db->count_all('open311_error_log');
+      if ($error_count > $max_errors_logged) {
+        // purge surplus errors (leaving only max_errors_logged in the table):
+        // don't seem able to do this with CodeIgniter's delete method
+        // hence SQL, which *might* be mySQL-specific (?)
+        $sql = "DELETE FROM open311_error_log ORDER BY created_at ASC LIMIT " 
+               . ($error_count - $max_errors_logged);
+        $CI->db->query($sql);
+      }
+    }
     
 		$error['code'] = $code;
 		$error['description'] = $msg;
