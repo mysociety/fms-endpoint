@@ -20,8 +20,10 @@ $service_definition = xml_add_child($dom, 'service_definition');
 	xml_add_child($attribute, 'datatype_description', $row->datatype_description);
 	xml_add_child($attribute, 'order', $row->order);
 	xml_add_child($attribute, 'description', $row->description);
-	xml_add_child($attribute, 'values', $row->values);	
+	if (strlen($row->values) > 0){
+		xml_add_child($attribute, 'values', $row->values);	
 
+	}
 	}
 
 xml_print($dom);
